@@ -2,6 +2,7 @@ from logging import root
 from tkinter import * # Import de la bibliotheque tkinter
 
 
+
 root = Tk() # Creation de la fenetre principale
 
 root.geometry("2000x1000") #largeur x hauteur
@@ -11,18 +12,29 @@ root.geometry("2000x1000") #largeur x hauteur
 hauteur = 858
 largeur = 1286
 
+#label
 bg = PhotoImage(file="/home/nono/Documents/Projet/Code/carte_projet.png") #Image de fond d'ecran de la carte (background)
-
+#bg = Image.open()
 #LABEL 1 (EN HAUT A GAUCHE) : CARTE
 
-label1 = Label( root, image = bg) 
-label1.place(x = 0, y = 0) 
+#label1 = Label( root, image = bg) 
+#label1.place(x = 0, y = 0) 
 
+c1 = Canvas(root, bg = "white", height = 1000, width = 1000,cursor='exchange') #canva choix chemin (echelle 2/5 --> hauteur*0.4 = )
+
+
+
+
+image = c1.create_image(400,800,image=bg)
 
 #CANVAS 2 (EN HAUT A DROITE) : CHEMIN
 
 c2 = Canvas(root, bg = "white", height = 400, width = 560) #canva choix chemin (echelle 2/5 --> hauteur*0.4 = )
 
+
+liste_point = 10,40,60,90
+
+c2.create_line(liste_point,fill='red',width=5)
 
 
 #CANVAS 3 (EN BAS A DROITE) : OBSTACLE
@@ -59,6 +71,12 @@ c4.place(x=0,y=hauteur)
 
 #C.pack()
 
+##----- Création des boutons -----##
+bouton_quitter = Button(root, text='Quitter', command=root.destroy)
+bouton_quitter.pack()
+
+
+#bouton_quitter.grid(row = 1, column = 1, padx = 3, pady = 3, sticky=E)
 
 
 root.mainloop()
