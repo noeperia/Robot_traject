@@ -1,6 +1,6 @@
 ##----- Importation des Modules -----##
 from tkinter import *
-from turtle import left, right
+from astar import *
 
 ##----- Création de la fenêtre -----##
 fen = Tk()
@@ -22,7 +22,39 @@ logo1 = dessin.create_image(650, 450, image = im )
 
 #-----Tracer du chemin-----##
 #Chemin
-liste_point = 0,0,500,500
+
+graph = AStarGraph()
+result, cost = AStarSearch((0,0), (10,30), graph)
+print ("route", result)
+print ("cost", cost)
+""""
+plt.plot([v[0] for v in result], [v[1] for v in result])
+for barrier in graph.barriers:
+    plt.plot([v[0] for v in barrier], [v[1] for v in barrier])
+plt.xlim(-1,8)
+plt.ylim(-1,8)
+plt.show()
+"""
+print(type(result)) #liste
+
+i=0
+print (len(result))
+liste_1D = []
+while i < len(result):
+    x = result[i][0]
+    y = result[i][1]
+    print(x,y)
+    
+    liste_1D.append(x)
+    liste_1D.append(y)
+    i=i+1
+
+print(len(liste_1D))
+for pos in liste_1D:
+    print(pos) 
+
+
+liste_point = liste_1D
 
 dessin.create_line(liste_point,fill='red',width=5)
 

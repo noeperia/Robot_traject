@@ -92,17 +92,17 @@ def AStarSearch(start, end, graph):
  
 if __name__=="__main__":
     graph = AStarGraph()
-    result, cost = AStarSearch((0,0), (8,8), graph)
+    result, cost = AStarSearch((0,0), (300,200), graph)
     print ("route", result)
     print ("cost", cost)
-    """"
+    
     plt.plot([v[0] for v in result], [v[1] for v in result])
     for barrier in graph.barriers:
         plt.plot([v[0] for v in barrier], [v[1] for v in barrier])
-    plt.xlim(-1,8)
-    plt.ylim(-1,8)
+    plt.xlim(0,3000)
+    plt.ylim(0,2000)
     plt.show()
-    """
+    
     print(type(result)) #liste
 
     i=0
