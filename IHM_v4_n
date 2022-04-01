@@ -87,7 +87,7 @@ graph = AStarGraph()
 
 #Rapport conversion image reelle
 rapport_x = 1288/(3000)
-rapport_y = 880/(2000)
+rapport_y = 859/(2000)
 
 
 result, cost = AStarSearch((0,0), (300,200), graph)
@@ -99,6 +99,7 @@ print ("cost", cost)
 i=0
 #print (len(result))
 liste_1D = []
+
 while i < len(result):
     x = result[i][0]*10*rapport_x
     y = result[i][1]*10*rapport_y
@@ -116,6 +117,10 @@ liste_point = liste_1D
 
 dessin.create_line(liste_point,fill='red',width=5)
 
+
+########################
+
+#Creation d'obstacle 
 
 
 

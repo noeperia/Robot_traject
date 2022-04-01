@@ -1,34 +1,21 @@
 ##----- Importation des Modules -----##
-import IHM 
+#import IHM 
 from astar import AStarGraph, AStarSearch
+from Points import Points
 
-graph = AStarGraph()
-result, cost = AStarSearch((0,0), (8,8), graph)
-print ("route", result)
-print ("cost", cost)
-""""
-plt.plot([v[0] for v in result], [v[1] for v in result])
-for barrier in graph.barriers:
-    plt.plot([v[0] for v in barrier], [v[1] for v in barrier])
-plt.xlim(-1,8)
-plt.ylim(-1,8)
-plt.show()
-"""
-print(type(result)) #liste
-
-i=0
-print (len(result))
-liste_1D = []
-while i < len(result):
-    x = result[i][0]
-    y = result[i][1]
-    print(x,y)
+def GenerateObstacle(points_a:Points,points_c:Points):
+    liste_obs = []
+    #contours
+    points_b = Points(points_a.x,points_c.y)
+    points_d = Points(points_c.x,points_a.y)
     
-    liste_1D.append(x)
-    liste_1D.append(y)
-    i=i+1
+    liste_obs = points_a.x,points_a.y,points_a.x,points_c.y,points_c.x,points_c.y,points_c.x,points_a.y
+    return liste_obs
 
-print(len(liste_1D))
-for pos in liste_1D:
-    print(pos) 
+if __name__=="__main__":
+    a = Points(15,15)
+    b = Points(100,100)
 
+    res = GenerateObstacle(a,b)
+
+    print(res)
