@@ -24,7 +24,7 @@ class AStarGraph(object):
         for dx, dy in [(1,0),(-1,0),(0,1),(0,-1),(1,1),(-1,1),(1,-1),(-1,-1)]:
             x2 = pos[0] + dx
             y2 = pos[1] + dy
-            if x2 < 0 or x2 > 300 or y2 < 0 or y2 > 200:
+            if x2 < 0 or x2 > 3000 or y2 < 0 or y2 > 2000:
                 continue
             n.append((x2, y2))
         return n
@@ -92,15 +92,15 @@ def AStarSearch(start, end, graph):
  
 if __name__=="__main__":
     graph = AStarGraph()
-    result, cost = AStarSearch((0,0), (300,200), graph)
-    print ("route", result)
+    result, cost = AStarSearch((5,5), (100,100), graph)
+    #print ("route", result)
     print ("cost", cost)
     
     plt.plot([v[0] for v in result], [v[1] for v in result])
     for barrier in graph.barriers:
         plt.plot([v[0] for v in barrier], [v[1] for v in barrier])
-    plt.xlim(0,300)
-    plt.ylim(0,200)
+    plt.xlim(0,3000)
+    plt.ylim(0,2000)
     plt.show()
     
     #print(type(result)) #liste
