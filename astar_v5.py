@@ -1,12 +1,22 @@
 from __future__ import print_function 
 import matplotlib.pyplot as plt
+from Main import GenerateObstacle
+from Points import Points
+#from Obstacle import *
  
 class AStarGraph(object):
     #Define a class board like grid with two barriers
  
     def __init__(self):
         self.barriers = []
-        self.barriers.append([(2,4),(2,5),(2,6),(3,6),(4,6),(5,6),(5,5),(5,4),(5,3),(5,2),(4,2),(3,2), (2, 2), (2,3), (2, 4)])
+        a = Points(1,1)
+        c = Points(10,10)
+
+       # print("1 ################")
+        #print(GenerateObstacle(a,c))
+        #print("################")
+        self.barriers.append(GenerateObstacle(a,c))
+        #self.barriers.append([(2,4),(2,5),(2,6),(3,6),(4,6),(5,6),(5,5),(5,4),(5,3),(5,2),(4,2),(3,2), (2, 2), (2,3), (2, 4)])
         #self.barriers.append([2,4,2,5,2,6,3,6,4,6,5,6,5,5,5,4,5,3,5,2,4,2,3,2, 2, 2, 2,3, 2, 4])
 
  
@@ -35,6 +45,31 @@ class AStarGraph(object):
             if b in barrier:
                 return 100 #Extremely high cost to enter barrier squares
         return 1 #Normal movement cost
+
+    def generate_obstacle(points_a:Points,points_c:Points):
+        liste_obs = []
+        #contours
+        points_b = Points(points_a.x,points_c.y)
+        points_d = Points(points_c.x,points_a.y)
+        
+        liste_obs.append([(points_a.x,points_a.y),(points_a.x,points_c.y),(points_c.x,points_c.y),(points_c.x,points_a.y)]) # il ne faudra pas oublier de fermer la liste ] (voir parametre astar)
+        print(liste_obs)
+        contours = str(liste_obs[1:-1])
+        #contours.append(liste_obs)
+        point=[]
+        contours_1 = []
+        i = 0
+        valeur = points_b.y - points_a.y
+        #print(valeur)
+
+        while(i<valeur):
+            point = points_a.x, points_a.y+i
+            contours.append(point) 
+            i = i +1
+
+        lst_str = str(contours)[1:-1] 
+        print(lst_str,"LA")
+        return lst_str 
  
 def AStarSearch(start, end, graph):
  
@@ -90,7 +125,10 @@ def AStarSearch(start, end, graph):
             F[neighbour] = G[neighbour] + H
  
     raise RuntimeError("A* failed to find a solution")
- 
+
+    
+
+
 if __name__=="__main__":
     graph = AStarGraph()
     result, cost = AStarSearch((0,0), (150,100), graph)
