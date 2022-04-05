@@ -83,11 +83,18 @@ dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
 #-----Tracer du chemin-----##
 #Chemin
 
-graph = AStarGraph()
+a = Points(1,1)
+c = Points(10,10)
+
+graph = AStarGraph(a,c)
+
+print("Obstacle" , graph.barriers)
+
+liste_barrriers = graph.barriers
 
 #Rapport conversion image reelle
-rapport_x = 1288/(3000)
-rapport_y = 859/(2000)
+rapport_x = (1288/(3000))*10
+rapport_y = (859/(2000))*10
 
 
 result, cost = AStarSearch((0,0), (300,200), graph)
@@ -101,13 +108,42 @@ i=0
 liste_1D = []
 
 while i < len(result):
-    x = result[i][0]*10*rapport_x
-    y = result[i][1]*10*rapport_y
+    x = result[i][0]*rapport_x
+    y = result[i][1]*rapport_y
     #print(x,y)
     
     liste_1D.append(x)
     liste_1D.append(y)
     i=i+1
+
+j = 0
+
+print(liste_barrriers.sh)
+while j < len(liste_barrriers):
+    x = result[i][0]*rapport_x
+    y = result[i][1]*rapport_y
+    #print(x,y)
+    
+    liste_1D.append(x)
+    liste_1D.append(y)
+    i=i+1
+
+
+print('###############')
+print('OLD',liste_barrriers)
+print('###############')
+new=[]
+print(len(liste_barrriers))
+print(liste_barrriers)
+while j < (len(liste_barrriers)-1):
+    print("COUCOU")
+    new.append(liste_barrriers[i]*rapport_x) #x
+    new.append(liste_barrriers[i+1]*rapport_y) #y
+    print('NEW',liste_barrriers)
+    j=j+1
+print('###############')
+print('NEW',new)
+print('###############')
 
 #print(len(liste_1D))
 # for pos in liste_1D:
@@ -116,6 +152,8 @@ while i < len(result):
 liste_point = liste_1D
 
 dessin.create_line(liste_point,fill='red',width=5)
+
+dessin.create_line(liste_barrriers,fill='pink',width=5)
 
 
 ########################

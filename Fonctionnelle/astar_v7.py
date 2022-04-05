@@ -7,10 +7,9 @@ from Points import Points
 class AStarGraph(object):
     #Define a class board like grid with two barriers
  
-    def __init__(self):
+    def __init__(self,a:Points,c:Points):
         self.barriers = []
-        a = Points(50,50)
-        c = Points(150,150)
+        
 
        # print("1 ################")
         #print(GenerateObstacle(a,c))
@@ -135,11 +134,20 @@ def AStarSearch(start, end, graph):
 
 
 if __name__=="__main__":
-    graph = AStarGraph()
+
+    a = Points(1,1)
+    c = Points(10,10)
+
+    graph = AStarGraph(a,c)
+
+    print("Obstacle" , graph.barriers)
+    
+    
     result, cost = AStarSearch((10,10), (200,200), graph)
     #print ("route", result)
     print ("cost", cost)
-     
+    
+
     plt.plot([v[0] for v in result], [v[1] for v in result])
     for barrier in graph.barriers:
         plt.plot([v[0] for v in barrier], [v[1] for v in barrier])

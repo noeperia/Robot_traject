@@ -33,32 +33,32 @@ def GenerateObstacle(points_a:Points,points_c:Points):
     valeur4 = points_d.x - points_a.x
     #print(valeur1)
 
-    i = 0
+    i = 1 #part à 1 car sinon point en double (pas génant mais plus propre)
     while(i<valeur1+1):
         #print("PASSE I")
         point = points_a.x, points_a.y+i
         contours.append(point) 
         i = i +1
-    j=0
+    j=1
     while(j<valeur2+1):
         #print("PASSE J")
         point = points_b.x+j, points_b.y
         contours.append(point) 
         j = j +1
-    k=0
+    k=1
     while(k<valeur3+1):
         #print("PASSE K")
         point = points_c.x, points_c.y-k
         contours.append(point) 
         k = k +1
-    l=0
+    l=1
     while(l<valeur4+1):
         #print("PASSE L")
         point = points_d.x-l, points_d.y
         contours.append(point) 
         l = l +1
 
-    print("Sortie",contours)
+    #print("Sortie",contours)
     return contours
 
 
