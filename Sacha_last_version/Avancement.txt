@@ -1,0 +1,4 @@
+Fichier important : 
+    -   astar + IHM + Main 
+    -   classe Points ( maybe Obstacle)
+- Actuellement sur le fichier IHM_V5 --> voir téléphone
