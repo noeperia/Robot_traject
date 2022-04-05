@@ -1,6 +1,6 @@
 from __future__ import print_function 
 import matplotlib.pyplot as plt
-from Main import GenerateObstacle
+from Main_v2 import GenerateObstacle
 from Points import Points
 #from Obstacle import *
  
