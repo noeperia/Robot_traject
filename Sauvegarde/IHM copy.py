@@ -1,6 +1,6 @@
 ##----- Importation des Modules -----##
 from tkinter import *
-from astar_v2 import *
+from astar_v6 import *
 
 ##----- Création de la fenêtre -----##
 fen = Tk()
@@ -24,7 +24,7 @@ logo1 = dessin.create_image(650, 450, image = im )
 #Chemin
 
 graph = AStarGraph()
-result, cost = AStarSearch((0,0), (1500,1500), graph)
+result, cost = AStarSearch((10,10), (200,200), graph)
 print ("route", result)
 print ("cost", cost)
 """"

@@ -1,6 +1,6 @@
 ##----- Importation des Modules -----##
 from tkinter import *
-from astar_v2 import *
+from astar_v7 import *
 
 
 ##----- Créations des Fonctions -----##

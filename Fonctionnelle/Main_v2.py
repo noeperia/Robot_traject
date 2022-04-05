@@ -23,38 +23,37 @@ def GenerateObstacle(points_a:Points,points_c:Points):
     #liste_obs.append(d)
 
     contours = liste_obs
-    print(contours,"CONTOUR")
+    #print(contours,"CONTOUR")
     #contours.append(liste_obs)
     point=[]
-    contours_1 = []
     
     valeur1 = points_b.y - points_a.y
     valeur2 = points_c.x - points_b.x
     valeur3 = points_c.y - points_d.y
     valeur4 = points_d.x - points_a.x
-    print(valeur1)
+    #print(valeur1)
 
     i = 0
     while(i<valeur1+1):
-        print("PASSE I")
+        #print("PASSE I")
         point = points_a.x, points_a.y+i
         contours.append(point) 
         i = i +1
     j=0
     while(j<valeur2+1):
-        print("PASSE J")
+        #print("PASSE J")
         point = points_b.x+j, points_b.y
         contours.append(point) 
         j = j +1
     k=0
     while(k<valeur3+1):
-        print("PASSE K")
+        #print("PASSE K")
         point = points_c.x, points_c.y-k
         contours.append(point) 
         k = k +1
     l=0
     while(l<valeur4+1):
-        print("PASSE L")
+        #print("PASSE L")
         point = points_d.x-l, points_d.y
         contours.append(point) 
         l = l +1
