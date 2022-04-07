@@ -11,10 +11,23 @@ liste_carrxy = []
 liste_circ = []
 liste_circxy = []
 ##----- Créations des Fonctions -----##
+
+def deplacerforme(event):
+    global object_id
+    if object_id is not None:
+        if formeee.get() == 1:
+            dessin.coords(object_id, event.x-100, event.y+40, event.x+100, event.y-40)
+        elif formeee.get() == 2:
+            dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
+        elif formeee.get() == 3:
+            dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
+
+
 def choisirformes(event):
+    global object_id
     if formeee.get() == 1:
-        rect1 = dessin.create_rectangle(event.x+100, event.y+40, event.x-100, event.y-50, fill='black', width=3, outline='red')  
-        liste_rect.append(rect1)
+        object_id = dessin.create_rectangle(event.x+100, event.y+40, event.x-100, event.y-50, fill='black', width=3, outline='red')  
+        liste_rect.append(object_id)
         liste_rectxy.append(event.x-100)
         liste_rectxy.append(event.y+40)
         liste_rectxy.append(event.x+100)
@@ -24,8 +37,8 @@ def choisirformes(event):
         i.set(i.get()+4)
 
     elif formeee.get() == 2:
-        carr = dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
-        liste_carr.append(carr)
+        object_id = dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
+        liste_carr.append(object_id)
         liste_carrxy.append(event.x-40)
         liste_carrxy.append(event.y+40)
         liste_carrxy.append(event.x+47)
@@ -34,8 +47,8 @@ def choisirformes(event):
         Text.set(Text.get() + "\nP1(" + str(liste_carrxy[j.get()]) + ";" + str(liste_carrxy[j.get()+1]) + ") P2(" + str(liste_carrxy[j.get()+2]) + ";" + str(liste_carrxy[j.get()+3]) + ")")
         j.set(j.get()+4)
     elif formeee.get() == 3:
-        cercle = dessin.create_oval(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
-        liste_circ.append(cercle)
+        object_id = dessin.create_oval(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
+        liste_circ.append(object_id)
         liste_circxy.append(event.x-40)
         liste_circxy.append(event.y+40)
         liste_circxy.append(event.x+47)
@@ -43,9 +56,9 @@ def choisirformes(event):
         
         Text.set(Text.get() + "\nP1(" + str(liste_circxy[k.get()]) + ";" + str(liste_circxy[k.get()+1]) + ") P2(" + str(liste_circxy[k.get()+2]) + ";" + str(liste_circxy[k.get()+3]) + ")")
         k.set(k.get()+4)
-
     else:
         formeee.set(0)
+
 
 def valid():
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
@@ -71,6 +84,7 @@ def afficher(event): ##AFFICHE COORDONNEES SOURIS TEMPS REEL
     message.configure(text="X = {} et Y = {}".format(abscisse, ordonnee))
 
 ##----- Création de la fenêtre -----##
+object_id = None
 fen = Tk()
 fen.title('Tracer dans un canevas')
 
@@ -82,7 +96,6 @@ dessin2.grid(row = 0, column = 40, columnspan = 1, padx = 3, pady = 3)
 
 e1 = Entry(dessin2)
 dessin2.create_window(200,480,window=e1, height=600, width=350)
-#varlist = {var: StringVar() for var in ["Text", "Text2", "Text3"]}
 Text = StringVar()
 
 i = IntVar(0)
@@ -132,6 +145,7 @@ dessin2.create_text(200, 30, text='Placer Obstacles : ', fill='#000000', font='A
 ##----- Programme principal -----##
 dessin.bind('<Motion>', afficher) ## DEPLACEMENT SOURIS TEMPS REEL
 dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
+dessin.bind('<Button-3>', deplacerforme)
 
 
 fen.mainloop()                    # Boucle d'attente des événements
