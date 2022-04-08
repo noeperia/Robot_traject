@@ -45,6 +45,9 @@ def deplacerforme(event):
 
 
 def choisirformes(event):
+    global debut
+    global started
+    global fin
     global object_id
     if formeee.get() == 1:
         object_id = dessin.create_rectangle(event.x+100, event.y+40, event.x-100, event.y-50, fill='black', width=3, outline='red')  
@@ -77,12 +80,40 @@ def choisirformes(event):
         
         Text.set(Text.get() + "\nP1(" + str(liste_circxy[k.get()]) + ";" + str(liste_circxy[k.get()+1]) + ") P2(" + str(liste_circxy[k.get()+2]) + ";" + str(liste_circxy[k.get()+3]) + ")")
         k.set(k.get()+4)
+    elif formeee.get() == 4:
+        debut = event.x
+        fin = 1288-debut
+        dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='green', width=3, outline='black', tag = 'mobile')
+        started = True
+        animate(20)
     else:
         formeee.set(0)
+
+#http://pascal.ortiz.free.fr/contents/tkinter/tkinter/le_canevas
+#http://tkinter.fdex.eu/doc/caw.html#Canvas.tag_bind
+#https://sites.google.com/site/pythonpasapas/modules/modules-de-la-bibliotheque-standard/tkinter/tkinterafter
+#https://sites.google.com/site/pythonpasapas/modules/modules-de-la-bibliotheque-standard/tkinter/tkinter-canvas-move
 
 
 def valid():
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
+
+
+def mobil():
+    formeee.set(4) # MOBILE
+
+
+def animate(v):
+    global debut
+    global fin
+    if started:
+        a,b,c,d=dessin.coords("mobile")
+        if a< debut-50 or c> fin:
+            v=-v
+        dessin.move("mobile", v, 0)
+        dessin.after(50, animate, v)
+        
+    
 
 
 def rec():
@@ -106,6 +137,8 @@ def afficher(event): ##AFFICHE COORDONNEES SOURIS TEMPS REEL
 
 ##----- Création de la fenêtre -----##
 object_id = None
+debut = None
+fin = None
 fen = Tk()
 fen.title('Tracer dans un canevas')
 
@@ -144,6 +177,9 @@ bouton_rond = dessin2.create_window(245,90, window = bouton_rond)
 bouton_valid = Button(fen, text='Confirmer', command=valid)
 bouton_valid = dessin2.create_window(340,90, window = bouton_valid)
 
+bouton_mobile = Button(fen, text='Mobile', command=mobil)
+bouton_mobile = dessin2.create_window(340,70, window = bouton_mobile)
+
 ##----- Création du Label -----##
 lbl = Label(dessin2, text='',fg='black',bg='black')
 
@@ -167,6 +203,8 @@ dessin2.create_text(200, 30, text='Placer Obstacles : ', fill='#000000', font='A
 dessin.bind('<Motion>', afficher) ## DEPLACEMENT SOURIS TEMPS REEL
 dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
 dessin.bind('<Button-3>', deplacerforme)
+
+started = False
 # bind tag 
 
 
