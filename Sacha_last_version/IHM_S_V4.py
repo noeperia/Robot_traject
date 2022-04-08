@@ -2,6 +2,7 @@
 from tkinter import *
 from tkinter import Canvas
 from turtle import circle
+from webbrowser import get
 
 liste_valid = []
 liste_rect = []
@@ -17,10 +18,30 @@ def deplacerforme(event):
     if object_id is not None:
         if formeee.get() == 1:
             dessin.coords(object_id, event.x-100, event.y+40, event.x+100, event.y-40)
+            liste_rectxy[i.get()-4] = event.x-100
+            liste_rectxy[i.get()-3] = event.y+40
+            liste_rectxy[i.get()-2] = event.x+100
+            liste_rectxy[i.get()-1] = event.y-50
+            #Text.set("")
+            #for g in range(0,i.get()-1,4):
+            #    Text.set(Text.get() + "\nP1(" + str(liste_rectxy[g]) + ";" + str(liste_rectxy[g+1]) + ") P2(" + str(liste_rectxy[g+2]) + ";" + str(liste_rectxy[g+3]) + ")")
+
         elif formeee.get() == 2:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
+            liste_carrxy[j.get()-4] = event.x-40
+            liste_carrxy[j.get()-3] = event.y+40
+            liste_carrxy[j.get()-2] = event.x+47
+            liste_carrxy[j.get()-1] = event.y-47
         elif formeee.get() == 3:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
+            liste_circxy[k.get()-4] = event.x-40
+            liste_circxy[k.get()-3] = event.y+40
+            liste_circxy[k.get()-2] = event.x+47
+            liste_circxy[k.get()-1] = event.y-47
+    liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
+    Text.set("")
+    for q in range(0,len(liste_valid),4):
+        Text.set(Text.get() + "\nP1(" + str(liste_valid[q]) + ";" + str(liste_valid[q+1]) + ") P2(" + str(liste_valid[q+2]) + ";" + str(liste_valid[q+3]) + ")")
 
 
 def choisirformes(event):
@@ -146,6 +167,7 @@ dessin2.create_text(200, 30, text='Placer Obstacles : ', fill='#000000', font='A
 dessin.bind('<Motion>', afficher) ## DEPLACEMENT SOURIS TEMPS REEL
 dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
 dessin.bind('<Button-3>', deplacerforme)
+# bind tag 
 
 
 fen.mainloop()                    # Boucle d'attente des événements
