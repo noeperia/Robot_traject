@@ -1,10 +1,2 @@
-
-
-
-class Points:
-    def __init__(self,x,y):
-        self.x = x
-        self.y = y
-        
-    
-
+from collections import namedtuple
+Points = namedtuple('Point', ['x', 'y'])

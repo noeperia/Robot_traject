@@ -1,6 +1,6 @@
 ##----- Importation des Modules -----##
 from tkinter import *
-from astar_v7 import *
+from Astar_V2_S import *
 
 
 ##----- Créations des Fonctions -----##
@@ -67,7 +67,7 @@ message = Label(fen, text='Ici du texte.')
 message.grid(row=8, column=0, columnspan=2, padx=3, pady=3, sticky=W+E)
 
 # Image 
-im = PhotoImage(file = '/home/nono/Documents/Projet/Code/carte_projet.png', master=fen)
+im = PhotoImage(file = 'Fonctionnelle/carte_projet.png', master=fen)
 logo1 = dessin.create_image(644, 430, image = im )
 
 #Texte IHM PLACER OBSTACLES
@@ -86,7 +86,7 @@ dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
 a = Points(1,1)
 c = Points(10,10)
 
-graph = AStarGraph(a,c)
+graph = AStarGraph()
 
 print("Obstacle" , graph.barriers)
 
@@ -118,15 +118,16 @@ while i < len(result):
 
 j = 0
 
-print(liste_barrriers.sh)
-while j < len(liste_barrriers):
-    x = result[i][0]*rapport_x
-    y = result[i][1]*rapport_y
-    #print(x,y)
     
-    liste_1D.append(x)
-    liste_1D.append(y)
-    i=i+1
+#   print(liste_barrriers)
+#    while j < len(liste_barrriers):
+#       x = result[i][0]*rapport_x
+#        y = result[i][1]*rapport_y
+        #print(x,y)
+        
+#        liste_1D.append(x)
+#       liste_1D.append(y)
+#        i=i+1
 
 
 print('###############')
@@ -145,11 +146,12 @@ print('###############')
 print('NEW',new)
 print('###############')
 
+
 #print(len(liste_1D))
 # for pos in liste_1D:
 #    print(pos) 
 
-liste_point = liste_1D
+l#iste_point = liste_1D
 
 dessin.create_line(liste_point,fill='red',width=5)
 
@@ -160,6 +162,4 @@ dessin.create_line(liste_barrriers,fill='pink',width=5)
 
 #Creation d'obstacle 
 
-
-
-fen.mainloop()                    # Boucle d'attente des événements
+fen.mainloop() # Boucle d'attente des événements
