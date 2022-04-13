@@ -3,6 +3,8 @@ from tkinter import *
 from tkinter import Canvas
 from turtle import circle
 from webbrowser import get
+from Points import Points
+import math
 
 liste_valid = []
 liste_rect = []
@@ -11,6 +13,9 @@ liste_carr = []
 liste_carrxy = []
 liste_circ = []
 liste_circxy = []
+liste_mob = []
+liste_cercle = [] # CONTIENT CENTRE + RAYON
+liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
 ##----- Créations des Fonctions -----##
 
 def deplacerforme(event):
@@ -22,22 +27,25 @@ def deplacerforme(event):
             liste_rectxy[i.get()-3] = event.y+40
             liste_rectxy[i.get()-2] = event.x+100
             liste_rectxy[i.get()-1] = event.y-50
-            #Text.set("")
-            #for g in range(0,i.get()-1,4):
-            #    Text.set(Text.get() + "\nP1(" + str(liste_rectxy[g]) + ";" + str(liste_rectxy[g+1]) + ") P2(" + str(liste_rectxy[g+2]) + ";" + str(liste_rectxy[g+3]) + ")")
-
+            liste_ca[f.get()-2] = Points(event.x-100,event.y+40)
+            liste_ca[f.get()-1] = Points(event.x+100,event.y-50)
         elif formeee.get() == 2:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
             liste_carrxy[j.get()-4] = event.x-40
             liste_carrxy[j.get()-3] = event.y+40
             liste_carrxy[j.get()-2] = event.x+47
             liste_carrxy[j.get()-1] = event.y-47
+            liste_ca[f.get()-2] = Points(event.x-40,event.y+40)
+            liste_ca[f.get()-1] = Points(event.x+47,event.y-47)
         elif formeee.get() == 3:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
             liste_circxy[k.get()-4] = event.x-40
             liste_circxy[k.get()-3] = event.y+40
             liste_circxy[k.get()-2] = event.x+47
             liste_circxy[k.get()-1] = event.y-47
+            ray = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
+            liste_cercle[o.get()-2] = Points(event.x-40,event.y+40)
+            liste_cercle[o.get()-1] = ray
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
     Text.set("")
     for q in range(0,len(liste_valid),4):
@@ -56,9 +64,11 @@ def choisirformes(event):
         liste_rectxy.append(event.y+40)
         liste_rectxy.append(event.x+100)
         liste_rectxy.append(event.y-50)
-        
+        liste_ca.append(Points(event.x-100,event.y+40))
+        liste_ca.append(Points(event.x+100,event.y-50))
         Text.set(Text.get() + "\nP1(" + str(liste_rectxy[i.get()]) + ";" + str(liste_rectxy[i.get()+1]) + ") P2(" + str(liste_rectxy[i.get()+2]) + ";" + str(liste_rectxy[i.get()+3]) + ")")
         i.set(i.get()+4)
+        f.set(f.get()+2)
 
     elif formeee.get() == 2:
         object_id = dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
@@ -67,25 +77,36 @@ def choisirformes(event):
         liste_carrxy.append(event.y+40)
         liste_carrxy.append(event.x+47)
         liste_carrxy.append(event.y-47)
-        
+        liste_ca.append(Points(event.x-40,event.y+40))
+        liste_ca.append(Points(event.x+47,event.y-47))
         Text.set(Text.get() + "\nP1(" + str(liste_carrxy[j.get()]) + ";" + str(liste_carrxy[j.get()+1]) + ") P2(" + str(liste_carrxy[j.get()+2]) + ";" + str(liste_carrxy[j.get()+3]) + ")")
         j.set(j.get()+4)
+        f.set(f.get()+2)
+
     elif formeee.get() == 3:
         object_id = dessin.create_oval(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
         liste_circ.append(object_id)
+        rayon = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
+        liste_cercle.append(Points(event.x,event.y))
+        liste_cercle.append(rayon)
+        print(liste_cercle)
         liste_circxy.append(event.x-40)
         liste_circxy.append(event.y+40)
         liste_circxy.append(event.x+47)
         liste_circxy.append(event.y-47)
-        
         Text.set(Text.get() + "\nP1(" + str(liste_circxy[k.get()]) + ";" + str(liste_circxy[k.get()+1]) + ") P2(" + str(liste_circxy[k.get()+2]) + ";" + str(liste_circxy[k.get()+3]) + ")")
         k.set(k.get()+4)
+        o.set(o.get()+2)
+
     elif formeee.get() == 4:
         debut = event.x
         fin = 1288-debut
-        dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='green', width=3, outline='black', tag = 'mobile')
+        A=(event.x+78,event.y-70)
+        B=(event.x-80, event.y+60)
+        dessin.create_oval(A, B,outline='red',width = 3, tag = 'area')
+        dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='blue', width=3, outline='black', tag = 'mobile')
         started = True
-        animate(20)
+        animate(10)
     else:
         formeee.set(0)
 
@@ -93,28 +114,40 @@ def choisirformes(event):
 #http://tkinter.fdex.eu/doc/caw.html#Canvas.tag_bind
 #https://sites.google.com/site/pythonpasapas/modules/modules-de-la-bibliotheque-standard/tkinter/tkinterafter
 #https://sites.google.com/site/pythonpasapas/modules/modules-de-la-bibliotheque-standard/tkinter/tkinter-canvas-move
-
+# LIEN IMPORTANT :
+# https://github.com/arimb/PurePursuit
 
 def valid():
-    liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
+    #liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
+    print("CERCLE : ")
+    print(liste_cercle)
+    print("CARRES")
+    print(liste_ca)
 
+def suppr(event):
+    clic=event.x, event.y
+    bord = dessin.find_closest(*clic)
+    dessin.delete(bord)
 
-def mobil():
-    formeee.set(4) # MOBILE
+def horizonta():
+    formeee.set(4) # MOBILE HORIZONTAL
 
 
 def animate(v):
     global debut
     global fin
+    #tampon = Text.get()
     if started:
         a,b,c,d=dessin.coords("mobile")
         if a< debut-50 or c> fin:
             v=-v
         dessin.move("mobile", v, 0)
+        dessin.move("area",v,0)
+        #liste_mob=dessin.coords("mobile")
+        #liste_mob=dessin.coords("mobile")
+        #Text.set(tampon + "\nP1(" + str(liste_mob[0]) + ";" + str(liste_mob[1]) + ") P2(" + str(liste_mob[2]) + ";" + str(liste_mob[3]) + ")")
         dessin.after(50, animate, v)
         
-    
-
 
 def rec():
     formeee.set(1) # RECTANGLE
@@ -155,30 +188,30 @@ Text = StringVar()
 i = IntVar(0)
 j = IntVar(0)
 k = IntVar(0)
+f = IntVar(0) # VARIABLE CARRE + RECTANGLE
+o = IntVar(0) # VARIABLE CERCLE
 LabelResultat = Label(fen, textvariable = Text ,fg = 'white', bg ="grey", width=35, height=40)
-dessin2.create_window(200,480,window=LabelResultat)
+dessin2.create_window(200,490,window=LabelResultat)
 Text.set("")
-#LabelResultat.grid(row=2,column=1, padx = 5, pady = 5)
-#label = Label(fen, text="Mode 1", bg='white',font=("Courrier",20))
-
 
 ##----- Création des boutons -----##
 formeee = IntVar()
 
 bouton_rectangle = Button(fen, text='Rectangle', command=rec)
-bouton_rectangle = dessin2.create_window(75,90, window = bouton_rectangle)
+bouton_rectangle = dessin2.create_window(75,105, window = bouton_rectangle)
 
 bouton_carre = Button(fen, text='Carré', command=car)
-bouton_carre = dessin2.create_window(170,90, window = bouton_carre)
+bouton_carre = dessin2.create_window(170,105, window = bouton_carre)
 
 bouton_rond = Button(fen, text='Rond', command=ro)
-bouton_rond = dessin2.create_window(245,90, window = bouton_rond)
+bouton_rond = dessin2.create_window(245,105, window = bouton_rond)
 
 bouton_valid = Button(fen, text='Confirmer', command=valid)
-bouton_valid = dessin2.create_window(340,90, window = bouton_valid)
+bouton_valid = dessin2.create_window(340,105, window = bouton_valid)
 
-bouton_mobile = Button(fen, text='Mobile', command=mobil)
-bouton_mobile = dessin2.create_window(340,70, window = bouton_mobile)
+bouton_hor = Button(fen, text='Horizontal', command=horizonta)
+bouton_hor = dessin2.create_window(200,70, window = bouton_hor)
+
 
 ##----- Création du Label -----##
 lbl = Label(dessin2, text='',fg='black',bg='black')
@@ -203,6 +236,7 @@ dessin2.create_text(200, 30, text='Placer Obstacles : ', fill='#000000', font='A
 dessin.bind('<Motion>', afficher) ## DEPLACEMENT SOURIS TEMPS REEL
 dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
 dessin.bind('<Button-3>', deplacerforme)
+dessin.bind("<Button-2>",suppr)
 
 started = False
 # bind tag 
