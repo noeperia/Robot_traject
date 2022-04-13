@@ -11,11 +11,17 @@ class AStarGraph(object):
  
     def __init__(self):
         self.barriers = []
-        #self.barriers.append([(2,4),(2,5),(2,6),(3,6),(4,6),(5,6),(5,5),(5,4),(5,3),(5,2),(4,2),(3,2), (2, 2), (2,3), (2, 4)])
-        self.barriers.append(Rond(Points(2,4),3))
-        self.barriers.append(Rond(Points(2,5),3))
-        self.barriers.append(Rond(Points(150,25+50),30))
+        self.barriers.append(Rond(Points(100,50),30))
+        self.barriers.append(Rond(Points(150,75),30))
+        #self.barriers.append(liste)
+        #self.barriers = liste_barriers
 
+      
+
+    #def __init__(self):
+    #    self.barriers = []
+    #    self.barriers.append(Rond(Points(100,50),30))
+    #    self.barriers.append(Rond(Points(150,75),30))
 
     def heuristic(self, start, goal):
         #Use Chebyshev distance heuristic if we can move one square either
@@ -105,6 +111,8 @@ def AStarSearch(start, end, graph):
             openVertices.add(neighbour) #Discovered a new vertex
  
     raise RuntimeError("A* failed to find a solution")
+
+
  
 if __name__=="__main__":
     graph = AStarGraph()

@@ -25,6 +25,19 @@ class Rond(Obstacle):
     def __repr__(self) -> str:
         return "rond(centre={},radius={})".format(self.centre, self.rayon)
 
+class Rectangle(Obstacle):
+    def __init__(self,a:Points,b:Points):
+        self.a = a
+        self.b = b
+
+    def distance(self,p2):
+        return math.sqrt((self.centre.x - p2.x)**2 + (self.centre.y - p2.y)**2)
+
+    def IsInObstacle(self,p2):
+        return (self.distance(p2)<=self.rayon)
+
+    def __repr__(self) -> str:
+        return "rond(centre={},radius={})".format(self.centre, self.rayon)
 
 class Obstacle_Mobile(Obstacle):
       def __init__(self,position,rayon,deplacement):

@@ -1,4 +1,5 @@
 ##----- Importation des Modules -----##
+from re import I
 from tkinter import *
 from Astar_V2_S import *
 
@@ -34,6 +35,15 @@ def afficher(event): ##AFFICHE COORDONNEES SOURIS TEMPS REEL
     abscisse = event.x
     ordonnee = event.y
     message.configure(text="X = {} et Y = {}".format(abscisse, ordonnee))
+
+
+def cercle(centre,rayon):
+    A = (centre.x-rayon,centre.y+rayon)
+    B = (centre.x+rayon,centre.y-rayon)
+    #print(A,B)
+    return (A, B)
+
+
 
 ##----- Création de la fenêtre -----##
 fen = Tk()
@@ -82,26 +92,30 @@ dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
 
 #-----Tracer du chemin-----##
 #Chemin
-
-a = Points(1,1)
-c = Points(10,10)
+barriers =[]
+barriers.append(Rond(Points(50,50),30))
+barriers.append(Rond(Points(100,75),30))
+print(barriers)
 
 graph = AStarGraph()
 
-print("Obstacle" , graph.barriers)
-
-liste_barrriers = graph.barriers
-
-#Rapport conversion image reelle
 rapport_x = (1288/(3000))*10
-rapport_y = (859/(2000))*10
+rapport_y = (858/(2000))*10
 
 
-result, cost = AStarSearch((0,0), (300,200), graph)
-print ("route", result)
+result, cost = AStarSearch(Points(300,200), Points(50,50), graph)
+#print ("route", result)
 print ("cost", cost)
 
-#print(type(result)) #liste
+print(graph.barriers)
+plt.plot([v.x for v in result], [v.y for v in result])
+#for barrier in graph.barriers:
+#    plt.plot([v.x for v in barrier], [v.y for v in barrier])
+
+print(result[0][0])
+
+
+#########
 
 i=0
 #print (len(result))
@@ -116,46 +130,31 @@ while i < len(result):
     liste_1D.append(y)
     i=i+1
 
-j = 0
+liste_barrriers=[]
+dessin.create_line(liste_1D,fill='red',width=5)
 
-    
-#   print(liste_barrriers)
-#    while j < len(liste_barrriers):
-#       x = result[i][0]*rapport_x
-#        y = result[i][1]*rapport_y
-        #print(x,y)
-        
-#        liste_1D.append(x)
-#       liste_1D.append(y)
-#        i=i+1
+#dessin.create_line(liste_barrriers,fill='pink',width=5)
 
 
-print('###############')
-print('OLD',liste_barrriers)
-print('###############')
-new=[]
-print(len(liste_barrriers))
-print(liste_barrriers)
-while j < (len(liste_barrriers)-1):
-    print("COUCOU")
-    new.append(liste_barrriers[i]*rapport_x) #x
-    new.append(liste_barrriers[i+1]*rapport_y) #y
-    print('NEW',liste_barrriers)
-    j=j+1
-print('###############')
-print('NEW',new)
-print('###############')
+
+#Boucle qui va permettre de traiter l'Affichage des obstacles (en fonction de leurs types)
+#print(type(graph.barriers[0]))
+i = 0
+while(i<len(graph.barriers)):
+    if(type(graph.barriers[i]) == Rond):
+        print("bruh")
+        (A, B) = cercle(graph.barriers[i].centre,graph.barriers[i].rayon)
+        #dessin.create_oval((180*rapport_x,45*rapport_y),(120*rapport_x,105*rapport_y),outline="blue",  width=5) #"light blue"
+        dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
+    i = i+1
+
+#print(graph.barriers[0].centre.x)
+#Multiplier par le rapport X et Y les points pour ensuite avoir un affichage de qualité
 
 
-#print(len(liste_1D))
-# for pos in liste_1D:
-#    print(pos) 
 
-l#iste_point = liste_1D
 
-dessin.create_line(liste_point,fill='red',width=5)
 
-dessin.create_line(liste_barrriers,fill='pink',width=5)
 
 
 ########################

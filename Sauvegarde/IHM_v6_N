@@ -1,0 +1,164 @@
+##----- Importation des Modules -----##
+from re import I
+from tkinter import *
+from Astar_V2_S import *
+
+
+##----- Créations des Fonctions -----##
+def choisirformes(event):
+    if formeee.get() == 1:
+        rect1 = dessin.create_rectangle(event.x, event.y, event.x-100, event.y-50, width=2, outline='#d05e82')
+    elif formeee.get() == 2:
+        carr = dessin.create_rectangle(event.x, event.y, event.x-47, event.y-47, width=2, outline='#d05e82')
+    elif formeee.get() == 3:
+        cercle = dessin.create_oval(event.x, event.y, event.x-47, event.y-47, fill='orange', outline='blue')
+    else:
+        formeee.set(0)
+
+
+
+def rec():
+    formeee.set(1) # RECTANGLE
+
+
+def car():
+    formeee.set(2) # CARRE
+
+
+def ro():
+    formeee.set(3) # CERCLE
+
+
+def afficher(event): ##AFFICHE COORDONNEES SOURIS TEMPS REEL
+    """ Entrées : Un événement de la souris
+        Sortie : Affiche en temps réel les coordonnées de la souris dans la zone de texte"""
+    abscisse = event.x
+    ordonnee = event.y
+    message.configure(text="X = {} et Y = {}".format(abscisse, ordonnee))
+
+
+def cercle(centre,rayon):
+    A = (centre.x-rayon,centre.y+rayon)
+    B = (centre.x+rayon,centre.y-rayon)
+    #print(A,B)
+    return (A, B)
+
+
+
+##----- Création de la fenêtre -----##
+fen = Tk()
+fen.title('Tracer dans un canevas')
+
+##----- Création du canevas -----##
+dessin = Canvas(fen, width = 1288, height = 859, bg = 'white')
+dessin.grid(row = 0, column = 0, columnspan = 2, padx = 3, pady = 3)
+dessin2 = Canvas(fen, width = 400, height = 858, bg = 'white')
+dessin2.grid(row = 0, column = 40, columnspan = 1, padx = 3, pady = 3)
+
+
+##----- Création des boutons -----##
+formeee = IntVar()
+
+bouton_quitter = Button(fen, text='Quitter', command=fen.destroy)
+bouton_quitter.grid(row = 1, column = 1, padx = 3, pady = 3, sticky=E)
+
+bouton_rectangle = Button(fen, text='Rectangle', command=rec)
+bouton_rectangle = dessin2.create_window(100,150, window = bouton_rectangle)
+
+bouton_carre = Button(fen, text='Carré', command=car)
+bouton_carre = dessin2.create_window(100,250, window = bouton_carre)
+
+bouton_rond = Button(fen, text='Rond', command=ro)
+bouton_rond = dessin2.create_window(100,320, window = bouton_rond)
+
+##----- Dessiner dans le canevas -----##
+# TEXTE
+message = Label(fen, text='Ici du texte.')
+message.grid(row=8, column=0, columnspan=2, padx=3, pady=3, sticky=W+E)
+
+# Image 
+im = PhotoImage(file = 'Fonctionnelle/carte_projet.png', master=fen)
+logo1 = dessin.create_image(644, 430, image = im )
+
+#Texte IHM PLACER OBSTACLES
+dessin2.create_text(200, 30, text='Placer Obstacles : ', fill='#000000', font='Arial 18')
+
+##----- Programme principal -----##
+dessin.bind('<Motion>', afficher) ## DEPLACEMENT SOURIS TEMPS REEL
+dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
+
+
+
+
+#-----Tracer du chemin-----##
+#Chemin
+barriers =[]
+barriers.append(Rond(Points(50,50),30))
+barriers.append(Rond(Points(100,75),30))
+print(barriers)
+
+graph = AStarGraph(barriers)
+
+rapport_x = (1288/(3000))*10
+rapport_y = (858/(2000))*10
+
+
+result, cost = AStarSearch(Points(300,200), Points(50,50), graph)
+#print ("route", result)
+print ("cost", cost)
+
+print(graph.barriers)
+plt.plot([v.x for v in result], [v.y for v in result])
+#for barrier in graph.barriers:
+#    plt.plot([v.x for v in barrier], [v.y for v in barrier])
+
+print(result[0][0])
+
+
+#########
+
+i=0
+#print (len(result))
+liste_1D = []
+
+while i < len(result):
+    x = result[i][0]*rapport_x
+    y = result[i][1]*rapport_y
+    #print(x,y)
+    
+    liste_1D.append(x)
+    liste_1D.append(y)
+    i=i+1
+
+liste_barrriers=[]
+dessin.create_line(liste_1D,fill='red',width=5)
+
+#dessin.create_line(liste_barrriers,fill='pink',width=5)
+
+
+
+#Boucle qui va permettre de traiter l'Affichage des obstacles (en fonction de leurs types)
+#print(type(graph.barriers[0]))
+i = 0
+while(i<len(graph.barriers)):
+    if(type(graph.barriers[i]) == Rond):
+        print("bruh")
+        (A, B) = cercle(graph.barriers[i].centre,graph.barriers[i].rayon)
+        #dessin.create_oval((180*rapport_x,45*rapport_y),(120*rapport_x,105*rapport_y),outline="blue",  width=5) #"light blue"
+        dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
+    i = i+1
+
+#print(graph.barriers[0].centre.x)
+#Multiplier par le rapport X et Y les points pour ensuite avoir un affichage de qualité
+
+
+
+
+
+
+
+########################
+
+#Creation d'obstacle 
+
+fen.mainloop() # Boucle d'attente des événements
