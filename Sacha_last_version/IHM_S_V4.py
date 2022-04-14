@@ -5,18 +5,30 @@ from turtle import circle
 from webbrowser import get
 from Points import Points
 import math
+import time,threading
 
-liste_valid = []
+liste_valid = [] # AFFICHAGE
 liste_rect = []
-liste_rectxy = []
+liste_rectxy = [] # AFFICHAGE
 liste_carr = []
-liste_carrxy = []
+liste_carrxy = [] # AFFICHAGE
 liste_circ = []
-liste_circxy = []
+liste_circxy = [] # AFFICHAGE
 liste_mob = []
 liste_cercle = [] # CONTIENT CENTRE + RAYON
 liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
 ##----- Créations des Fonctions -----##
+def foo():
+    print(time.ctime())
+    threading.Timer(2,foo).start()
+    if started:
+        w,x,s,l = dessin.coords('area')
+        print(w+47,x+47)
+        liste_mob[p.get()-2] = Points(w+47,x+47)
+        liste_mob[p.get()-1] = math.sqrt((w-s)**2+(x-l)**2)
+    print(liste_ca)
+    print(liste_cercle)
+
 
 def deplacerforme(event):
     global object_id
@@ -101,12 +113,13 @@ def choisirformes(event):
     elif formeee.get() == 4:
         debut = event.x
         fin = 1288-debut
-        A=(event.x+78,event.y-70)
-        B=(event.x-80, event.y+60)
-        dessin.create_oval(A, B,outline='red',width = 3, tag = 'area')
-        dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='blue', width=3, outline='black', tag = 'mobile')
+        A=(event.x+40,event.y-47)
+        B=(event.x-47, event.y+40)
+        dessin.create_oval(A, B,outline='red',fill = 'blue',width = 3, tag = 'area')
+        #dessin.create_rectangle(event.x+40, event.y+40, event.x-47, event.y-47, fill='blue', width=3, outline='black', tag = 'mobile')
         started = True
-        animate(10)
+        p.set(2)
+        animate(1)
     else:
         formeee.set(0)
 
@@ -125,9 +138,45 @@ def valid():
     print(liste_ca)
 
 def suppr(event):
+    global started
     clic=event.x, event.y
     bord = dessin.find_closest(*clic)
+    if formeee.get() == 1:
+        del liste_rectxy[i.get()-1]
+        del liste_rectxy[i.get()-2]
+        del liste_rectxy[i.get()-3]
+        del liste_rectxy[i.get()-4]
+        i.set(i.get()-4)
+        del liste_ca[f.get()-1]
+        del liste_ca[f.get()-2]
+        f.set(f.get()-2)
+
+    elif formeee.get() == 2:
+        del liste_carrxy[j.get()-1]
+        del liste_carrxy[j.get()-2]
+        del liste_carrxy[j.get()-3]
+        del liste_carrxy[j.get()-4]
+        j.set(j.get()-4)
+        del liste_ca[f.get()-1]
+        del liste_ca[f.get()-2]
+        f.set(f.get()-2)
+    elif formeee.get() == 3:
+        del liste_circxy[k.get()-1]
+        del liste_circxy[k.get()-2]
+        del liste_circxy[k.get()-3]
+        del liste_circxy[k.get()-4]
+        k.set(k.get()-4)
+        del liste_cercle[o.get()-1]
+        del liste_cercle[o.get()-2]
+        o.set(o.get()-2)
+    elif formeee.get() == 4:
+        started = False         
     dessin.delete(bord)
+    liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
+    Text.set("")
+    for q in range(0,len(liste_valid),4):
+        Text.set(Text.get() + "\nP1(" + str(liste_valid[q]) + ";" + str(liste_valid[q+1]) + ") P2(" + str(liste_valid[q+2]) + ";" + str(liste_valid[q+3]) + ")")
+
 
 def horizonta():
     formeee.set(4) # MOBILE HORIZONTAL
@@ -138,10 +187,10 @@ def animate(v):
     global fin
     #tampon = Text.get()
     if started:
-        a,b,c,d=dessin.coords("mobile")
-        if a< debut-50 or c> fin:
+        a,b,c,d=dessin.coords("area")
+        if a< debut-100 or c> fin:
             v=-v
-        dessin.move("mobile", v, 0)
+        #dessin.move("mobile", v, 0)
         dessin.move("area",v,0)
         #liste_mob=dessin.coords("mobile")
         #liste_mob=dessin.coords("mobile")
@@ -188,6 +237,7 @@ Text = StringVar()
 i = IntVar(0)
 j = IntVar(0)
 k = IntVar(0)
+p = IntVar(0)
 f = IntVar(0) # VARIABLE CARRE + RECTANGLE
 o = IntVar(0) # VARIABLE CERCLE
 LabelResultat = Label(fen, textvariable = Text ,fg = 'white', bg ="grey", width=35, height=40)
@@ -241,5 +291,5 @@ dessin.bind("<Button-2>",suppr)
 started = False
 # bind tag 
 
-
+foo()
 fen.mainloop()                    # Boucle d'attente des événements
