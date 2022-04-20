@@ -19,20 +19,24 @@ liste_cercle = [] # CONTIENT CENTRE + RAYON
 liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
 ##----- Créations des Fonctions -----##
 def foo():
-    print(time.ctime())
+   # print(time.ctime())
     threading.Timer(2,foo).start()
     if started:
         w,x,s,l = dessin.coords('area')
         print(w+47,x+47)
         liste_mob[p.get()-2] = Points(w+47,x+47)
         liste_mob[p.get()-1] = math.sqrt((w-s)**2+(x-l)**2)
-    print(liste_ca)
-    print(liste_cercle)
+    #print(liste_ca)
+    #print(liste_cercle)
 
 
 def deplacerforme(event):
     global object_id
     if object_id is not None:
+        print("formee.get objid evt")
+        print(formeee.get())
+        print(object_id)
+        print(event)
         if formeee.get() == 1:
             dessin.coords(object_id, event.x-100, event.y+40, event.x+100, event.y-40)
             liste_rectxy[i.get()-4] = event.x-100
@@ -58,6 +62,9 @@ def deplacerforme(event):
             ray = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
             liste_cercle[o.get()-2] = Points(event.x-40,event.y+40)
             liste_cercle[o.get()-1] = ray
+            print("liste_circxy liste_cercle")
+            print(liste_circxy)
+            print(liste_cercle)
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
     Text.set("")
     for q in range(0,len(liste_valid),4):
@@ -96,7 +103,10 @@ def choisirformes(event):
         f.set(f.get()+2)
 
     elif formeee.get() == 3:
-        object_id = dessin.create_oval(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
+        object_id = dessin.create_oval(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red', tag='oval')
+        print(dessin.coords("oval"))
+
+        # FONCTION QUI CRÉER 
         liste_circ.append(object_id)
         rayon = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
         liste_cercle.append(Points(event.x,event.y))
@@ -180,6 +190,7 @@ def suppr(event):
 
 def horizonta():
     formeee.set(4) # MOBILE HORIZONTAL
+    
 
 
 def animate(v):
