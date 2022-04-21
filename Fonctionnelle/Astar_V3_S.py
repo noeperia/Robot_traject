@@ -9,11 +9,12 @@ import math
 class AStarGraph(object):
     #Define a class board like grid with two barriers
  
-    def __init__(self):
-        self.barriers = []
-        self.barriers.append(Rond(Points(100,50),30))
-        self.barriers.append(Rond(Points(150,75),30))
+    def __init__(self,liste):
+        self.barriers = liste
+        #self.barriers.append(Rond(Points(100,50),30))
+        #self.barriers.append(Rond(Points(150,75),30))
         #self.barriers.append(Rectangle(Points(50,50),Points(80,80)))
+        
         #self.barriers.append(liste)
         #self.barriers = liste_barriers
 
@@ -116,7 +117,14 @@ def AStarSearch(start, end, graph):
 
  
 if __name__=="__main__":
-    graph = AStarGraph()
+    
+    liste = [Rond(Points(100,50),30)]
+    liste.append(Rond(Points(100,50),30))
+    liste.append(Rond(Points(150,75),30))
+    liste.append(Rectangle(Points(50,50),Points(80,80)))
+    
+    
+    graph = AStarGraph(liste)
 
     rapport_x = (1288/(3000))*10
     rapport_y = (880/(2000))*10

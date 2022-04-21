@@ -43,7 +43,74 @@ def cercle(centre,rayon):
     #print(A,B)
     return (A, B)
 
+def Ajout_Obstacle(liste_carre,liste_rond):
+    i = 0
+    while(i<len(liste_carre)):
+        r = Rectangle(liste_carre[i].x*rapport_x,liste_carre[i].x*rapport_y)
+        
 
+def Chemin_Astar(Depart,Arrive):
+    #-----Tracer du chemin-----##
+    #Chemin
+    #barriers =[]
+    #barriers.append(Rond(Points(50,50),30))
+    #barriers.append(Rond(Points(100,75),30))
+    #print(barriers)
+
+    #print(graph.barriers[0].centre.x)
+    #Multiplier par le rapport X et Y les points pour ensuite avoir un affichage de qualité
+    graph = AStarGraph()
+
+    rapport_x = (1288/(3000))*10
+    rapport_y = (858/(2000))*10
+
+
+    result, cost = AStarSearch(Depart, Arrive, graph)
+    #print ("route", result)
+    print ("cost", cost)
+
+    print(graph.barriers)
+    #plt.plot([v.x for v in result], [v.y for v in result])
+    #for barrier in graph.barriers:
+    #    plt.plot([v.x for v in barrier], [v.y for v in barrier])
+
+    print(result[0][0])
+
+
+    #########
+
+    i=0
+    #print (len(result))
+    liste_1D = []
+
+    while i < len(result):
+        x = result[i][0]*rapport_x
+        y = result[i][1]*rapport_y
+        #print(x,y)
+        
+        liste_1D.append(x)
+        liste_1D.append(y)
+        i=i+1
+
+    liste_barrriers=[]
+    dessin.create_line(liste_1D,fill='red',width=5)
+
+    #dessin.create_line(liste_barrriers,fill='pink',width=5)
+
+
+
+    #Boucle qui va permettre de traiter l'Affichage des obstacles (en fonction de leurs types)
+    #print(type(graph.barriers[0]))
+    i = 0
+    while(i<len(graph.barriers)):
+        if(type(graph.barriers[i]) == Rond):
+            print("bruh")
+            (A, B) = cercle(graph.barriers[i].centre,graph.barriers[i].rayon)
+            #dessin.create_oval((180*rapport_x,45*rapport_y),(120*rapport_x,105*rapport_y),outline="blue",  width=5) #"light blue"
+            dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
+        if(type(graph.barriers[i]== Rectangle)):
+            pass
+        i = i+1
 
 ##----- Création de la fenêtre -----##
 fen = Tk()
@@ -88,77 +155,10 @@ dessin.bind('<Motion>', afficher) ## DEPLACEMENT SOURIS TEMPS REEL
 dessin.bind('<Button-1>',choisirformes) ## CLIQUE SOURIS APRES CHOIX FORME
 
 
+#Appel de la fonction tracé chemin Astar
 
-
-#-----Tracer du chemin-----##
-#Chemin
-barriers =[]
-barriers.append(Rond(Points(50,50),30))
-barriers.append(Rond(Points(100,75),30))
-print(barriers)
-
-graph = AStarGraph()
-
-rapport_x = (1288/(3000))*10
-rapport_y = (858/(2000))*10
-
-
-result, cost = AStarSearch(Points(300,200), Points(50,50), graph)
-#print ("route", result)
-print ("cost", cost)
-
-print(graph.barriers)
-plt.plot([v.x for v in result], [v.y for v in result])
-#for barrier in graph.barriers:
-#    plt.plot([v.x for v in barrier], [v.y for v in barrier])
-
-print(result[0][0])
-
-
-#########
-
-i=0
-#print (len(result))
-liste_1D = []
-
-while i < len(result):
-    x = result[i][0]*rapport_x
-    y = result[i][1]*rapport_y
-    #print(x,y)
-    
-    liste_1D.append(x)
-    liste_1D.append(y)
-    i=i+1
-
-liste_barrriers=[]
-dessin.create_line(liste_1D,fill='red',width=5)
-
-#dessin.create_line(liste_barrriers,fill='pink',width=5)
-
-
-
-#Boucle qui va permettre de traiter l'Affichage des obstacles (en fonction de leurs types)
-#print(type(graph.barriers[0]))
-i = 0
-while(i<len(graph.barriers)):
-    if(type(graph.barriers[i]) == Rond):
-        print("bruh")
-        (A, B) = cercle(graph.barriers[i].centre,graph.barriers[i].rayon)
-        #dessin.create_oval((180*rapport_x,45*rapport_y),(120*rapport_x,105*rapport_y),outline="blue",  width=5) #"light blue"
-        dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
-    i = i+1
-
-#print(graph.barriers[0].centre.x)
-#Multiplier par le rapport X et Y les points pour ensuite avoir un affichage de qualité
-
-
-
-
-
-
-
-########################
-
-#Creation d'obstacle 
+Depart = Points(300,200)
+Arrive = Points(50,50)
+Chemin_Astar(Depart,Arrive)
 
 fen.mainloop() # Boucle d'attente des événements

@@ -4,6 +4,8 @@ from tkinter import Canvas
 from turtle import circle
 from webbrowser import get
 from Points import Points
+from Obstacle import Obstacle
+from Astar_V3_S import *
 import math
 import time,threading
 
@@ -17,6 +19,17 @@ liste_circxy = [] # AFFICHAGE
 liste_mob = []
 liste_cercle = [] # CONTIENT CENTRE + RAYON
 liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
+
+
+
+rapport_x = (1288/(3000))*10
+rapport_y = (858/(2000))*10
+
+inv_rapport_x = 1/rapport_x
+inv_rapport_y = 1/rapport_y
+
+#Permet de recuperer la liste des Obstacle fournit par l'IHM
+
 ##----- Créations des Fonctions -----##
 def foo():
     print(time.ctime())
@@ -26,8 +39,26 @@ def foo():
         print(w+47,x+47)
         liste_mob[p.get()-2] = Points(w+47,x+47)
         liste_mob[p.get()-1] = math.sqrt((w-s)**2+(x-l)**2)
-    print(liste_ca)
-    print(liste_cercle)
+    
+    #dessin.delete(trait)
+    liste_obstacle = []
+    print("RECTANGLE",liste_ca)
+    print("CERCLE",liste_cercle)
+    print("OBSTACLE START",liste_obstacle)
+    
+    liste_obstacle = Recuperation_IHM(liste_ca,liste_cercle)
+
+    #liste_obstacle.append((Rond(Points(100,50),30)))
+    #liste_obstacle.append(liste_cercle)
+    
+    #liste_obstacle = liste_ca.append(liste_cercle)
+    
+    print("OBSTACLE APRES",liste_obstacle)
+
+    Depart = Points(300,200)
+    Arrive = Points(50,50)
+    
+    Chemin_Astar(Depart,Arrive,liste_obstacle)
 
 
 def deplacerforme(event):
@@ -217,6 +248,102 @@ def afficher(event): ##AFFICHE COORDONNEES SOURIS TEMPS REEL
     ordonnee = event.y
     message.configure(text="X = {} et Y = {}".format(abscisse, ordonnee))
 
+
+def Chemin_Astar(Depart,Arrive,liste_obs):
+    #-----Tracer du chemin-----##
+    #Chemin
+    #barriers =[]
+    #barriers.append(Rond(Points(50,50),30))
+    #barriers.append(Rond(Points(100,75),30))
+    #print(barriers)
+
+    #print(graph.barriers[0].centre.x)
+    #Multiplier par le rapport X et Y les points pour ensuite avoir un affichage de qualité
+    liste = [Rond(Points(100,50),30)]
+    liste.append(Rond(Points(100,50),30))
+    liste.append(Rond(Points(150,75),30))
+    liste.append(Rectangle(Points(50,50),Points(80,80)))
+    
+    
+    graph = AStarGraph(liste_obs)
+
+    
+
+
+    result, cost = AStarSearch(Depart, Arrive, graph)
+    #print ("route", result)
+    print ("cost", cost)
+
+    print(graph.barriers)
+    #plt.plot([v.x for v in result], [v.y for v in result])
+    #for barrier in graph.barriers:
+    #    plt.plot([v.x for v in barrier], [v.y for v in barrier])
+
+    print(result[0][0])
+
+
+    #########
+
+    i=0
+    #print (len(result))
+    liste_1D = []
+
+    while i < len(result):
+        x = result[i][0]*rapport_x
+        y = result[i][1]*rapport_y
+        #print(x,y)
+        
+        liste_1D.append(x)
+        liste_1D.append(y)
+        i=i+1
+
+    liste_barrriers=[]
+    #trait = dessin.create_line(liste_1D,fill='red',width=5)
+    dessin.create_line(liste_1D,fill='red',width=5)
+    #dessin.create_line(liste_barrriers,fill='pink',width=5)
+
+
+
+    #Boucle qui va permettre de traiter l'Affichage des obstacles (en fonction de leurs types)
+    #print(type(graph.barriers[0]))
+    i = 0
+    while(i<len(graph.barriers)):
+        if(type(graph.barriers[i]) == Rond):
+            #print("bruh")
+            (A, B) = cercle(graph.barriers[i].centre,graph.barriers[i].rayon)
+            #dessin.create_oval((180*rapport_x,45*rapport_y),(120*rapport_x,105*rapport_y),outline="blue",  width=5) #"light blue"
+            dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
+        if(type(graph.barriers[i]== Rectangle)):
+            pass
+        i = i+1
+
+
+def cercle(centre,rayon):
+    A = (centre.x-rayon,centre.y+rayon)
+    B = (centre.x+rayon,centre.y-rayon)
+    #print(A,B)
+    return (A, B)
+
+def Recuperation_IHM(liste_rectangle,liste_rond):
+    liste_obstacle = []
+    #for rectangle in liste_rectangle:
+    #    liste_obstacle.append(rectangle)
+    i = 0
+    while(i<len(liste_rond)):
+        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1])
+        liste_obstacle.append(r)
+        i = i+2
+
+   # for rond in liste_rond:
+    #    liste_obstacle.append(rond)
+
+    return liste_obstacle
+"""
+def Ajout_Obstacle(liste_carre,liste_rond):
+    i = 0
+    while(i<len(liste_carre)):
+        r = Rectangle(liste_carre[i].x*rapport_x,liste_carre[i].x*rapport_y)
+"""
 ##----- Création de la fenêtre -----##
 object_id = None
 debut = None

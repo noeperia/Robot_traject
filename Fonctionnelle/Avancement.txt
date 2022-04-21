@@ -2,3 +2,6 @@ Fichier important :
     -   astar + IHM + Main 
     -   classe Points ( maybe Obstacle)
 - Actuellement sur le fichier IHM_V5 --> voir téléphone
+
+- Recupérer temps de traitement Astar (temps courants)
+- Ajouter Obstacle (Coin et Rectangle)

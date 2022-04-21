@@ -3,12 +3,11 @@ import math
 
 class Obstacle:
 
-    def __init__(self,points:list):
-        self.points = points
+    def __init__(self):
+        pass
 
-""" def IsInObstacle(self,points:list):
-        for h in len.points:
-            pass"""
+    def IsInObstacle(self,p):
+        raise
 
 
 class Rond(Obstacle):
@@ -16,31 +15,49 @@ class Rond(Obstacle):
         self.centre = centre
         self.rayon = rayon
 
-    def distance(self,p2):
+    def distance(self,p2): 
         return math.sqrt((self.centre.x - p2.x)**2 + (self.centre.y - p2.y)**2)
 
     def IsInObstacle(self,p2):
         return (self.distance(p2)<=self.rayon)
 
     def __repr__(self) -> str:
-        return "rond(centre={},radius={})".format(self.centre, self.rayon)
+        return "Rond(centre={},radius={})".format(self.centre, self.rayon)
 
 class Rectangle(Obstacle):
-    def __init__(self,a:Points,b:Points):
+    def __init__(self,a:Points,c:Points):
         self.a = a
-        self.b = b
+        self.c = c
+        x_b = c.x
+        y_b = a.y
+        self.b = Points(x_b,y_b)
+        x_d = a.x
+        y_d = c.y
+        self.d = Points(x_d,y_d)
 
-    def distance(self,p2):
-        return math.sqrt((self.centre.x - p2.x)**2 + (self.centre.y - p2.y)**2)
-
-    def IsInObstacle(self,p2):
-        return (self.distance(p2)<=self.rayon)
+    def IsInObstacle(self,p):
+        return (p.x<self.b.x & p.x > self.a.x & p.y > self.d.y & p.y < self.a.y) 
 
     def __repr__(self) -> str:
-        return "rond(centre={},radius={})".format(self.centre, self.rayon)
+        return "Rectangle(A={},B={},C={},D={})".format(self.a, self.b,self.c,self.d)
+
+class Coin(Obstacle):
+    def __init__(self):
+        pass
+        
+ 
+    def IsInObstacle(self,p):
+        print("coucou")
+        pass
+        return 0
+
+    def __repr__(self) -> str:
+        return "Rectangle(A={},B={})".format(self.a, self.b)
+
 
 class Obstacle_Mobile(Obstacle):
       def __init__(self,position,rayon,deplacement):
         self.position = position
         self.rayon = rayon
         self.deplacement = deplacement
+

@@ -1,2 +1,2 @@
 from collections import namedtuple
-Points = namedtuple('Point', ['x', 'y'])
+Points = namedtuple('Points', ['x', 'y'])
