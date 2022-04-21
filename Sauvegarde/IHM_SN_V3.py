@@ -4,31 +4,14 @@ from tkinter import Canvas
 from turtle import circle
 from webbrowser import get
 from Points import Points
-from Obstacle import Obstacle
+from Sauvegarde.Obstacle_v1 import Obstacle
 from Astar_V3_S import *
 import math
 import time,threading
 
-liste_valid = [] # AFFICHAGE
-liste_rect = []
-liste_rectxy = [] # AFFICHAGE
-liste_carr = []
-liste_carrxy = [] # AFFICHAGE
-liste_circ = []
-liste_circxy = [] # AFFICHAGE
-liste_mob = []
-liste_cercle = [] # CONTIENT CENTRE + RAYON
-liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
-
-
-
-rapport_x = (1288/(3000))*10
-rapport_y = (858/(2000))*10
-
-inv_rapport_x = 1/rapport_x
-inv_rapport_y = 1/rapport_y
 
 #Permet de recuperer la liste des Obstacle fournit par l'IHM
+trait = 0
 
 ##----- Créations des Fonctions -----##
 def foo():
@@ -40,7 +23,9 @@ def foo():
         liste_mob[p.get()-2] = Points(w+47,x+47)
         liste_mob[p.get()-1] = math.sqrt((w-s)**2+(x-l)**2)
     
-    #dessin.delete(trait)
+    global trait
+    print (trait)
+    dessin.delete(trait)
     liste_obstacle = []
     print("RECTANGLE",liste_ca)
     print("CERCLE",liste_cercle)
@@ -55,10 +40,11 @@ def foo():
     
     print("OBSTACLE APRES",liste_obstacle)
 
-    Depart = Points(300,200)
-    Arrive = Points(50,50)
+    Depart = Points(50,50)
+    Arrive = Points(300,200)
+
     
-    Chemin_Astar(Depart,Arrive,liste_obstacle)
+    Chemin_Astar(Arrive,Depart,liste_obstacle)
 
 
 def deplacerforme(event):
@@ -274,18 +260,16 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
     #print ("route", result)
     print ("cost", cost)
 
-    print(graph.barriers)
+    #print(graph.barriers)
     #plt.plot([v.x for v in result], [v.y for v in result])
     #for barrier in graph.barriers:
     #    plt.plot([v.x for v in barrier], [v.y for v in barrier])
 
-    print(result[0][0])
-
+    
 
     #########
 
     i=0
-    #print (len(result))
     liste_1D = []
 
     while i < len(result):
@@ -298,8 +282,13 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
         i=i+1
 
     liste_barrriers=[]
-    #trait = dessin.create_line(liste_1D,fill='red',width=5)
-    dessin.create_line(liste_1D,fill='red',width=5)
+    global trait 
+    trait = dessin.create_line(liste_1D,fill='red',width=5)
+
+    #print("TYPE", type(trait))
+    #print("type :", type(dessin.create_line(liste_1D,fill='red',width=5)))
+
+    #dessin.create_line(liste_1D,fill='red',width=5)
     #dessin.create_line(liste_barrriers,fill='pink',width=5)
 
 
@@ -316,7 +305,7 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
         if(type(graph.barriers[i]== Rectangle)):
             pass
         i = i+1
-
+    #dessin.delete(trait)
 
 def cercle(centre,rayon):
     A = (centre.x-rayon,centre.y+rayon)
@@ -330,7 +319,7 @@ def Recuperation_IHM(liste_rectangle,liste_rond):
     #    liste_obstacle.append(rectangle)
     i = 0
     while(i<len(liste_rond)):
-        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1])
+        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1]*1/4)
         liste_obstacle.append(r)
         i = i+2
 
@@ -417,6 +406,30 @@ dessin.bind("<Button-2>",suppr)
 
 started = False
 # bind tag 
+
+#VARIABLES GLOBALES
+
+
+liste_valid = [] # AFFICHAGE
+liste_rect = []
+liste_rectxy = [] # AFFICHAGE
+liste_carr = []
+liste_carrxy = [] # AFFICHAGE
+liste_circ = []
+liste_circxy = [] # AFFICHAGE
+liste_mob = []
+liste_cercle = [] # CONTIENT CENTRE + RAYON
+liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
+
+
+
+rapport_x = (1288/(3000))*10
+rapport_y = (858/(2000))*10
+
+inv_rapport_x = 1/rapport_x
+inv_rapport_y = 1/rapport_y
+
+
 
 foo()
 fen.mainloop()                    # Boucle d'attente des événements

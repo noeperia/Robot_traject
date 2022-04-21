@@ -1,4 +1,4 @@
-from Obstacle import *
+from Sauvegarde.Obstacle_v1 import *
 from Points import Points
 def Recuperation_IHM(liste_rectangle,liste_rond):
     liste_obstacle = []

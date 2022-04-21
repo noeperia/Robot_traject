@@ -5,13 +5,14 @@ from turtle import circle
 from webbrowser import get
 from Points import Points
 from Obstacle import Obstacle
-from Astar_V3_S import *
+from Astar_V4_S import *
 import math
 import time,threading
 
 
 #Permet de recuperer la liste des Obstacle fournit par l'IHM
 trait = 0
+cercle_bleu = 0
 
 ##----- Créations des Fonctions -----##
 def foo():
@@ -40,8 +41,9 @@ def foo():
     
     print("OBSTACLE APRES",liste_obstacle)
 
-    Arrive = Points(300,200)
     Depart = Points(50,50)
+    Arrive = Points(300,200)
+
     
     Chemin_Astar(Arrive,Depart,liste_obstacle)
 
@@ -72,8 +74,9 @@ def deplacerforme(event):
             liste_circxy[k.get()-2] = event.x+47
             liste_circxy[k.get()-1] = event.y-47
             ray = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
-            liste_cercle[o.get()-2] = Points(event.x-40,event.y+40)
+            liste_cercle[o.get()-2] = Points(event.x,event.y)
             liste_cercle[o.get()-1] = ray
+            dessin.delete(cercle_bleu)
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
     Text.set("")
     for q in range(0,len(liste_valid),4):
@@ -300,7 +303,16 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
             #print("bruh")
             (A, B) = cercle(graph.barriers[i].centre,graph.barriers[i].rayon)
             #dessin.create_oval((180*rapport_x,45*rapport_y),(120*rapport_x,105*rapport_y),outline="blue",  width=5) #"light blue"
-            dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
+
+            print("#####")
+            print("Centre")
+            print(graph.barriers[i].centre)
+            print("Rayon")
+            print(graph.barriers[i].rayon)
+
+
+            global cercle_bleu
+            cercle_bleu = dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
         if(type(graph.barriers[i]== Rectangle)):
             pass
         i = i+1
@@ -318,9 +330,14 @@ def Recuperation_IHM(liste_rectangle,liste_rond):
     #    liste_obstacle.append(rectangle)
     i = 0
     while(i<len(liste_rond)):
-        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1])
+        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1]*1/4)
         liste_obstacle.append(r)
         i = i+2
+
+    j = 0
+    while(j<len(liste_rectangle)):
+        r = Rectangle()
+
 
    # for rond in liste_rond:
     #    liste_obstacle.append(rond)

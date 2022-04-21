@@ -4,8 +4,8 @@ from tkinter import Canvas
 from turtle import circle
 from webbrowser import get
 from Points import Points
-from Obstacle import Obstacle
-from Astar_V3_S import *
+from Sauvegarde.Obstacle_v1 import Obstacle
+from Sauvegarde.Astar_V3_S import *
 import math
 import time,threading
 
@@ -40,9 +40,8 @@ def foo():
     
     print("OBSTACLE APRES",liste_obstacle)
 
-    Depart = Points(50,50)
     Arrive = Points(300,200)
-
+    Depart = Points(50,50)
     
     Chemin_Astar(Arrive,Depart,liste_obstacle)
 
@@ -319,7 +318,7 @@ def Recuperation_IHM(liste_rectangle,liste_rond):
     #    liste_obstacle.append(rectangle)
     i = 0
     while(i<len(liste_rond)):
-        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1]*1/4)
+        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1])
         liste_obstacle.append(r)
         i = i+2
 

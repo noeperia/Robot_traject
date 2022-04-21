@@ -4,15 +4,31 @@ from tkinter import Canvas
 from turtle import circle
 from webbrowser import get
 from Points import Points
-from Obstacle import Obstacle
-from Astar_V3_S import *
+from Sauvegarde.Obstacle_v1 import Obstacle
+from Sauvegarde.Astar_V3_S import *
 import math
 import time,threading
 
+liste_valid = [] # AFFICHAGE
+liste_rect = []
+liste_rectxy = [] # AFFICHAGE
+liste_carr = []
+liste_carrxy = [] # AFFICHAGE
+liste_circ = []
+liste_circxy = [] # AFFICHAGE
+liste_mob = []
+liste_cercle = [] # CONTIENT CENTRE + RAYON
+liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
+
+
+
+rapport_x = (1288/(3000))*10
+rapport_y = (858/(2000))*10
+
+inv_rapport_x = 1/rapport_x
+inv_rapport_y = 1/rapport_y
 
 #Permet de recuperer la liste des Obstacle fournit par l'IHM
-trait = 0
-cercle_bleu = 0
 
 ##----- Créations des Fonctions -----##
 def foo():
@@ -24,9 +40,7 @@ def foo():
         liste_mob[p.get()-2] = Points(w+47,x+47)
         liste_mob[p.get()-1] = math.sqrt((w-s)**2+(x-l)**2)
     
-    global trait
-    print (trait)
-    dessin.delete(trait)
+    #dessin.delete(trait)
     liste_obstacle = []
     print("RECTANGLE",liste_ca)
     print("CERCLE",liste_cercle)
@@ -41,11 +55,10 @@ def foo():
     
     print("OBSTACLE APRES",liste_obstacle)
 
-    Depart = Points(50,50)
-    Arrive = Points(300,200)
-
+    Depart = Points(300,200)
+    Arrive = Points(50,50)
     
-    Chemin_Astar(Arrive,Depart,liste_obstacle)
+    Chemin_Astar(Depart,Arrive,liste_obstacle)
 
 
 def deplacerforme(event):
@@ -74,9 +87,8 @@ def deplacerforme(event):
             liste_circxy[k.get()-2] = event.x+47
             liste_circxy[k.get()-1] = event.y-47
             ray = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
-            liste_cercle[o.get()-2] = Points(event.x,event.y)
+            liste_cercle[o.get()-2] = Points(event.x-40,event.y+40)
             liste_cercle[o.get()-1] = ray
-            dessin.delete(cercle_bleu)
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
     Text.set("")
     for q in range(0,len(liste_valid),4):
@@ -262,16 +274,18 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
     #print ("route", result)
     print ("cost", cost)
 
-    #print(graph.barriers)
+    print(graph.barriers)
     #plt.plot([v.x for v in result], [v.y for v in result])
     #for barrier in graph.barriers:
     #    plt.plot([v.x for v in barrier], [v.y for v in barrier])
 
-    
+    print(result[0][0])
+
 
     #########
 
     i=0
+    #print (len(result))
     liste_1D = []
 
     while i < len(result):
@@ -284,13 +298,8 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
         i=i+1
 
     liste_barrriers=[]
-    global trait 
-    trait = dessin.create_line(liste_1D,fill='red',width=5)
-
-    #print("TYPE", type(trait))
-    #print("type :", type(dessin.create_line(liste_1D,fill='red',width=5)))
-
-    #dessin.create_line(liste_1D,fill='red',width=5)
+    #trait = dessin.create_line(liste_1D,fill='red',width=5)
+    dessin.create_line(liste_1D,fill='red',width=5)
     #dessin.create_line(liste_barrriers,fill='pink',width=5)
 
 
@@ -303,20 +312,11 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
             #print("bruh")
             (A, B) = cercle(graph.barriers[i].centre,graph.barriers[i].rayon)
             #dessin.create_oval((180*rapport_x,45*rapport_y),(120*rapport_x,105*rapport_y),outline="blue",  width=5) #"light blue"
-
-            print("#####")
-            print("Centre")
-            print(graph.barriers[i].centre)
-            print("Rayon")
-            print(graph.barriers[i].rayon)
-
-
-            global cercle_bleu
-            cercle_bleu = dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
+            dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
         if(type(graph.barriers[i]== Rectangle)):
             pass
         i = i+1
-    #dessin.delete(trait)
+
 
 def cercle(centre,rayon):
     A = (centre.x-rayon,centre.y+rayon)
@@ -330,7 +330,7 @@ def Recuperation_IHM(liste_rectangle,liste_rond):
     #    liste_obstacle.append(rectangle)
     i = 0
     while(i<len(liste_rond)):
-        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1]*1/4)
+        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1])
         liste_obstacle.append(r)
         i = i+2
 
@@ -417,30 +417,6 @@ dessin.bind("<Button-2>",suppr)
 
 started = False
 # bind tag 
-
-#VARIABLES GLOBALES
-
-
-liste_valid = [] # AFFICHAGE
-liste_rect = []
-liste_rectxy = [] # AFFICHAGE
-liste_carr = []
-liste_carrxy = [] # AFFICHAGE
-liste_circ = []
-liste_circxy = [] # AFFICHAGE
-liste_mob = []
-liste_cercle = [] # CONTIENT CENTRE + RAYON
-liste_ca = [] # CONTIENT P1 et P2 CARRE + RECTANGLE
-
-
-
-rapport_x = (1288/(3000))*10
-rapport_y = (858/(2000))*10
-
-inv_rapport_x = 1/rapport_x
-inv_rapport_y = 1/rapport_y
-
-
 
 foo()
 fen.mainloop()                    # Boucle d'attente des événements

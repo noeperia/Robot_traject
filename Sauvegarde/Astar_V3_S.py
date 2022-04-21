@@ -2,7 +2,7 @@ from __future__ import print_function
 from operator import truediv 
 import matplotlib.pyplot as plt
 
-from Obstacle import Obstacle, Rectangle, Rond
+from Sauvegarde.Obstacle_v1 import Obstacle, Rectangle, Rond
 from Points import Points
 import math
  
