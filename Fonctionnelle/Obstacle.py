@@ -48,12 +48,11 @@ class Coin(Obstacle):
         
  
     def IsInObstacle(self,p):
-        print("coucou")
-        pass
-        return 0
+        #y = x - 2900
+        return ((p.x+p.y)<51 | (p.x>249 & p.y<51 & p.x+p.y>249))
 
     def __repr__(self) -> str:
-        return "Rectangle(A={},B={})".format(self.a, self.b)
+        return "Coin"
 
 
 class Obstacle_Mobile(Obstacle):

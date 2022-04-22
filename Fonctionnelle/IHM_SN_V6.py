@@ -2,7 +2,7 @@
 from tkinter import *
 from tkinter import Canvas
 from Points import Points
-from Obstacle import Obstacle
+from Obstacle import Coin, Obstacle
 from Astar_V4_S import *
 import math
 import time,threading
@@ -357,12 +357,14 @@ def Recuperation_IHM(liste_rectangle,liste_rond):
         j= j+2
 
     return liste_obstacle
-"""
-def Ajout_Obstacle(liste_carre,liste_rond):
-    i = 0
-    while(i<len(liste_carre)):
-        r = Rectangle(liste_carre[i].x*rapport_x,liste_carre[i].x*rapport_y)
-"""
+
+
+def Map_init(liste_obs):
+    c = Coin()
+    liste_obs.append(c)
+    #Rectangle decor (fond)
+
+
 ##----- Création de la fenêtre -----##
 object_id = None
 debut = None
