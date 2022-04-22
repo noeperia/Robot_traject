@@ -36,10 +36,11 @@ class Rectangle(Obstacle):
         self.d = Points(x_d,y_d)
 
     def IsInObstacle(self,p):
-        return (p.x<self.b.x & p.x > self.a.x & p.y > self.d.y & p.y < self.a.y) 
+        return ((p.x<self.b.x) & (p.x>self.a.x) & (p.y>self.d.y) & (p.y<self.a.y)) 
 
     def __repr__(self) -> str:
         return "Rectangle(A={},B={},C={},D={})".format(self.a, self.b,self.c,self.d)
+        #return "Rectangle"
 
 class Coin(Obstacle):
     def __init__(self):

@@ -1,7 +1,7 @@
-Fichier important : 
-    -   astar + IHM + Main 
-    -   classe Points ( maybe Obstacle)
-- Actuellement sur le fichier IHM_V5 --> voir téléphone
+Sauvegarde intéressante : 
+- IHM_SN_V5 ---> fichier avec Rectangle + Cercle Fonctionnelle
 
-- Recupérer temps de traitement Astar (temps courants)
-- Ajouter Obstacle (Coin et Rectangle)
+Tâches : 
+- Recupérer temps de traitement Astar (temps courants) (moins de 200 ms sinon bzr) --> Option à rajouter https://python.developpez.com/faq/?page=Optimisation#:~:text=Pour%20mesurer%20le%20temps%20d,le%20temps%20CPU%20en%20secondes.
+- Ajouter Obstacle (Coin)
+- Faire fonction MapInit() qui permet de placer les obstacles toujours présent sur la table (les rectangles ...)

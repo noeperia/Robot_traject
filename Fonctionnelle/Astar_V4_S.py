@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from Obstacle import Obstacle, Rectangle, Rond
 from Points import Points
 import math
- 
+import time
 class AStarGraph(object):
     #Define a class board like grid with two barriers
  
@@ -117,7 +117,7 @@ def AStarSearch(start, end, graph):
 
  
 if __name__=="__main__":
-    
+    tps1 = time.time()
     liste = [Rond(Points(100,50),30)]
     liste.append(Rond(Points(100,50),30))
     liste.append(Rond(Points(150,75),30))
@@ -132,6 +132,8 @@ if __name__=="__main__":
 
     result, cost = AStarSearch(Points(250,150), Points(0,0), graph)
     #print ("route", result)
+    tps2=time.time()
+    print(tps2 - tps1)
     print ("cost", cost)
     
     print(graph.barriers)

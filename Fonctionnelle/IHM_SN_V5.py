@@ -1,8 +1,6 @@
 ##----- Importation des Modules -----##
 from tkinter import *
 from tkinter import Canvas
-from turtle import circle
-from webbrowser import get
 from Points import Points
 from Obstacle import Obstacle
 from Astar_V4_S import *
@@ -17,7 +15,8 @@ cercle_bleu = 0
 ##----- Créations des Fonctions -----##
 def foo():
     print(time.ctime())
-    threading.Timer(2,foo).start()
+
+    threading.Timer(1,foo).start()
     if started:
         w,x,s,l = dessin.coords('area')
         print(w+47,x+47)
@@ -48,6 +47,7 @@ def foo():
 
     
     Chemin_Astar(Arrive,Depart,liste_obstacle)
+   
 
 
 def deplacerforme(event):
@@ -300,9 +300,13 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
     #Boucle qui va permettre de traiter l'Affichage des obstacles (en fonction de leurs types)
     #print(type(graph.barriers[0]))
     i = 0
+    bobo = 0
     while(i<len(graph.barriers)):
         print("#######")
+        print("-----")
         print(graph.barriers[i])
+        print("Taille tableau obstacle",len(graph.barriers))
+        print("-----")
         print("#######")
 
         if(type(graph.barriers[i]) == Rond):
@@ -319,11 +323,12 @@ def Chemin_Astar(Depart,Arrive,liste_obs):
             global cercle_bleu
             cercle_bleu = dessin.create_oval((A[0]*rapport_x,A[1]*rapport_y),(B[0]*rapport_x,B[1]*rapport_y),outline="blue",  width=5) #"light blue"
         if(type(graph.barriers[i])== Rectangle):
-            print("Rectangle",type(graph.barriers[i]))
-            print(Rectangle)
+            bobo = bobo +1
+            print("VALLEUUUUUUUUUUUUUURS",graph.barriers[i])
             rectangle_bleu = dessin.create_rectangle((graph.barriers[i].a.x*rapport_x,graph.barriers[i].a.y*rapport_y),(graph.barriers[i].c.x*rapport_x,graph.barriers[i].c.y*rapport_y),outline="blue",  width=5) #"light blue"
             
         i = i+1
+        print("BOBOBOBOBOBBOBBOBBOBOBOBOOB",bobo)
     #dessin.delete(trait)
 
 def cercle(centre,rayon):
@@ -338,13 +343,13 @@ def Recuperation_IHM(liste_rectangle,liste_rond):
     #    liste_obstacle.append(rectangle)
     i = 0
     while(i<len(liste_rond)):
-        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1]*1/4)
+        r = Rond(Points(liste_rond[i][0]*inv_rapport_x,liste_rond[i][1]*inv_rapport_y),liste_rond[i+1]*1/5)
         liste_obstacle.append(r)
         i = i+2
 
     j = 0
     while(j<len(liste_rectangle)):
-        rect = Rectangle(Points(liste_rectangle[0].x*inv_rapport_x,liste_rectangle[0].y*inv_rapport_y),Points(liste_rectangle[1].x*inv_rapport_x,liste_rectangle[1].y*inv_rapport_y))
+        rect = Rectangle(Points(liste_rectangle[j].x*inv_rapport_x,liste_rectangle[j].y*inv_rapport_y),Points(liste_rectangle[j+1].x*inv_rapport_x,liste_rectangle[j+1].y*inv_rapport_y))
         liste_obstacle.append(rect)
         #print(liste_obstacle)
         j= j+2
