@@ -48,8 +48,8 @@ class Coin(Obstacle):
         
  
     def IsInObstacle(self,p):
-        #y = x - 2900
-        return ((p.x+p.y)<51 | (p.x>249 & p.y<51 & p.x+p.y>249))
+        #y = x - 290
+        return ((p.x+p.y)<51 | (p.x-p.y>290))
 
     def __repr__(self) -> str:
         return "Coin"

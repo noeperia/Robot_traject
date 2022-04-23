@@ -62,16 +62,16 @@ def deplacerforme(event):
             liste_rectxy[i.get()-3] = event.y+40
             liste_rectxy[i.get()-2] = event.x+100
             liste_rectxy[i.get()-1] = event.y-50
-            liste_ca[f.get()-2] = Points(event.x-100,event.y+40)
-            liste_ca[f.get()-1] = Points(event.x+100,event.y-50)
+            liste_ca[f.get()-2] = Points(event.x-100,changeY(event.y)+40) #######
+            liste_ca[f.get()-1] = Points(event.x+100,changeY(event.y)-50)#######
         elif formeee.get() == 2:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
             liste_carrxy[j.get()-4] = event.x-40
             liste_carrxy[j.get()-3] = event.y+40
             liste_carrxy[j.get()-2] = event.x+47
             liste_carrxy[j.get()-1] = event.y-47
-            liste_ca[f.get()-2] = Points(event.x-40,event.y+40)
-            liste_ca[f.get()-1] = Points(event.x+47,event.y-47)
+            liste_ca[f.get()-2] = Points(event.x-40,changeY(event.y)+40)#######
+            liste_ca[f.get()-1] = Points(event.x+47,changeY(event.y)-47)#######
         elif formeee.get() == 3:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
             liste_circxy[k.get()-4] = event.x-40
@@ -79,7 +79,7 @@ def deplacerforme(event):
             liste_circxy[k.get()-2] = event.x+47
             liste_circxy[k.get()-1] = event.y-47
             ray = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
-            liste_cercle[o.get()-2] = Points(event.x,event.y)
+            liste_cercle[o.get()-2] = Points(event.x,changeY(event.y))
             liste_cercle[o.get()-1] = ray
             dessin.delete(cercle_bleu)
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
@@ -100,9 +100,8 @@ def choisirformes(event):
         liste_rectxy.append(event.y+40)
         liste_rectxy.append(event.x+100)
         liste_rectxy.append(event.y-50)
-        liste_ca.append(Points(event.x-100,event.y+40))
-        liste_ca.append(Points(event.x+100,event.y-50))
-        Text.set(Text.get() + "\nP1(" + str(liste_rectxy[i.get()]) + ";" + str(liste_rectxy[i.get()+1]) + ") P2(" + str(liste_rectxy[i.get()+2]) + ";" + str(liste_rectxy[i.get()+3]) + ")")
+        liste_ca.append(Points(event.x-100,changeY(event.y)+40))######
+        liste_ca.append(Points(event.x+100,changeY(event.y)-50))#####        Text.set(Text.get() + "\nP1(" + str(liste_rectxy[i.get()]) + ";" + str(liste_rectxy[i.get()+1]) + ") P2(" + str(liste_rectxy[i.get()+2]) + ";" + str(liste_rectxy[i.get()+3]) + ")")
         i.set(i.get()+4)
         f.set(f.get()+2)
 
@@ -113,8 +112,8 @@ def choisirformes(event):
         liste_carrxy.append(event.y+40)
         liste_carrxy.append(event.x+47)
         liste_carrxy.append(event.y-47)
-        liste_ca.append(Points(event.x-40,event.y+40))
-        liste_ca.append(Points(event.x+47,event.y-47))
+        liste_ca.append(Points(event.x-40,changeY(event.y)+40))#####
+        liste_ca.append(Points(event.x+47,changeY(event.y)-47))#####
         Text.set(Text.get() + "\nP1(" + str(liste_carrxy[j.get()]) + ";" + str(liste_carrxy[j.get()+1]) + ") P2(" + str(liste_carrxy[j.get()+2]) + ";" + str(liste_carrxy[j.get()+3]) + ")")
         j.set(j.get()+4)
         f.set(f.get()+2)
@@ -123,7 +122,7 @@ def choisirformes(event):
         object_id = dessin.create_oval(event.x+40, event.y+40, event.x-47, event.y-47, fill='black', width=3, outline='red')
         liste_circ.append(object_id)
         rayon = math.sqrt((event.x-(event.x-40))**2+(event.y-(event.y+40))**2)
-        liste_cercle.append(Points(event.x,event.y))
+        liste_cercle.append(Points(event.x,changeY(event.y)))######
         liste_cercle.append(rayon)
         print(liste_cercle)
         liste_circxy.append(event.x-40)
