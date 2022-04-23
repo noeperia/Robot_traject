@@ -427,7 +427,8 @@ bouton_quitter = Button(fen, text='Quitter', command=fen.destroy)
 bouton_quitter.grid(row = 1, column = 1, padx = 3, pady = 3, sticky=E)
 
 # Image 
-im = PhotoImage(file = 'Fonctionnelle/carte_projet.png', master=fen)
+#im = PhotoImage(file = 'Fonctionnelle/carte_projet.png', master=fen)
+im = PhotoImage(file = 'Robot_traject\Fonctionnelle\carte_projet.png', master=fen)
 logo1 = dessin.create_image(644, 430, image = im )
 
 #Texte IHM PLACER OBSTACLES
