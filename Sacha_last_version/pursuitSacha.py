@@ -1,5 +1,6 @@
 # COLL SACHA pursuit
 import math
+from tkinter import IntVar
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -37,15 +38,55 @@ class State:
 
     # Met à jour la position du robot (X;Y;Yaw;V)
 def update(state, a, delta):
+    global detect
+    global tryagain
+    global target_speed
+    global cpt
     # Calcul de X et Y p.6 : https://homes.cs.washington.edu/~todorov/courses/cseP590/05_Kinematics.pdf
     state.x = state.x + state.v * math.cos(state.yaw) * dt      # Update Position X
     state.y = state.y + state.v * math.sin(state.yaw) * dt      # Update Position Y
     print(state.v / L * math.tan(delta) * dt)
     state.dyaw = state.v / L * math.tan(delta) * dt
+    print(tryagain)
+    print(cpt)
+    """ if (detect<0 and detect - state.dyaw < 0) or (detect>0 and detect - state.dyaw > 0) : # Si changement de signe de vitesse angulaire
+         #state.v = state.v - a * dt/2
+         # and ((state.dyaw < -0.00) or (state.dyaw > 0.00))
+        tryagain = True
+        cpt += 1
+    else: 
+         #state.v = state.v + a * dt
+        tryagain = False
+
+    if tryagain and cpt<20:
+        target_speed = 10.0/3.6
+        cpt = 0
+    else:
+        target_speed = 3.0/3.6"""
+
+    if (detect<0 and detect - state.dyaw < 0) or (detect>0 and detect - state.dyaw > 0) : # Si changement de signe de vitesse angulaire
+         #state.v = state.v - a * dt/2
+         # and ((state.dyaw < -0.00) or (state.dyaw > 0.00))
+        #tryagain = True
+        cpt += 1
+        if cpt<30:
+            tryagain = True
+        else:
+            exit
+    else: 
+         #state.v = state.v + a * dt
+        tryagain = False
+        cpt = 0
+
+    if tryagain:
+        target_speed = 13.0/3.6
+        #cpt = 0
+    else:
+        target_speed = 3.0/3.6
     state.yaw = state.yaw + state.v / L * math.tan(delta) * dt  # Update Angle Rotation Yaw
     state.v = state.v + a * dt                                  # Update Vitesse
     #state.vang = state.vang + newvang
-
+    detect = state.v / L * math.tan(delta) * dt
     return state
 
     # Variation du rapport cyclique du moteur
@@ -101,14 +142,15 @@ def pure_pursuit_control(state, cx, cy, pind):
 
     return delta, ind
 
-
+target_speed = 0
+cpt = 0
 def main():
     # Chemin Généré par A*
     cx = np.arange(0, 60, 0.1) # (Xdebut, Xarrivée, Step)
     cy = [math.sin(ix / 5.0) * ix / 2.0 for ix in cx]
 
     # RÉGLER VITESSE
-    target_speed = 5.0 / 3.6  # [m/s]
+    #target_speed = 10.0 / 3.6  # [m/s]
 
     # TEMPS MAX SIMULATION
     T = 100.0 
@@ -183,6 +225,9 @@ def main():
         plt.grid(True)
         plt.show()
 
+
+tryagain = False
+detect = 0
 
 if __name__ == '__main__':
     print("Pure pursuit path tracking simulation start")
