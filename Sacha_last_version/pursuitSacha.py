@@ -21,6 +21,9 @@ dt = 0.1
 # Empattement robot [m]
 L = 2.9
 
+list_detect = [] # Stabilisation des changements de vitesse
+
+
 show_animation = True
 
 class State:
@@ -64,12 +67,13 @@ def update(state, a, delta):
     else:
         target_speed = 3.0/3.6"""
 
-    if (detect<0 and detect - state.dyaw < 0) or (detect>0 and detect - state.dyaw > 0) : # Si changement de signe de vitesse angulaire
+    if ((detect<0 and detect - state.dyaw > 0) or (detect>0 and detect - state.dyaw < 0)) and (state.dyaw>0.01 or state.dyaw < -0.01) : # Si changement de signe de vitesse angulaire
+                                        #<                                        #>
          #state.v = state.v - a * dt/2
          # and ((state.dyaw < -0.00) or (state.dyaw > 0.00))
         #tryagain = True
         cpt += 1
-        if cpt<30:
+        if cpt<20: # cpt<30 60 100
             tryagain = True
         else:
             exit
@@ -79,10 +83,10 @@ def update(state, a, delta):
         cpt = 0
 
     if tryagain:
-        target_speed = 13.0/3.6
+        target_speed = 1.0/3.6
         #cpt = 0
     else:
-        target_speed = 3.0/3.6
+        target_speed = 13.0/3.6
     state.yaw = state.yaw + state.v / L * math.tan(delta) * dt  # Update Angle Rotation Yaw
     state.v = state.v + a * dt                                  # Update Vitesse
     #state.vang = state.vang + newvang
