@@ -1,4 +1,5 @@
 ##----- Importation des Modules -----##
+from glob import glob
 from tkinter import *
 from tkinter import Canvas
 from turtle import circle
@@ -7,6 +8,7 @@ from Points import Points
 import math
 import time,threading
 
+liste_waypoint = [] # WAYPOINT
 liste_valid = [] # AFFICHAGE
 liste_rect = []
 liste_rectxy = [] # AFFICHAGE
@@ -26,8 +28,15 @@ def foo():
         print(w+47,x+47)
         liste_mob[p.get()-2] = Points(w+47,x+47)
         liste_mob[p.get()-1] = math.sqrt((w-s)**2+(x-l)**2)
+    print("###### Liste Des Carrés ######")
     print(liste_ca)
+    print("")
+    print("###### Liste Des Cercles ######")
     print(liste_cercle)
+    print("")
+    print("###### Liste Des Cercles des Objectifs ######")
+    print(liste_waypoint)
+    print("")
 
 
 def changeY(coordy):
@@ -38,26 +47,26 @@ def changeY(coordy):
 def deplacerforme(event):
     global object_id
     if object_id is not None:
-        print("formee.get objid evt")
-        print(formeee.get())
-        print(object_id)
-        print(event)
+        #print("formee.get objid evt")
+        #print(formeee.get())
+        #print(object_id)
+        #print(event)
         if formeee.get() == 1:
             dessin.coords(object_id, event.x-100, event.y+40, event.x+100, event.y-40)
             liste_rectxy[i.get()-4] = event.x-100
             liste_rectxy[i.get()-3] = event.y+40
             liste_rectxy[i.get()-2] = event.x+100
             liste_rectxy[i.get()-1] = event.y-50
-            liste_ca[f.get()-2] = Points(event.x-100,changeY(event.y)+40) #######
-            liste_ca[f.get()-1] = Points(event.x+100,changeY(event.y)-50)#######
+            liste_ca[f.get()-2] = Points(event.x-100,changeY(event.y)-50) #######
+            liste_ca[f.get()-1] = Points(event.x+100,changeY(event.y)+40)#######
         elif formeee.get() == 2:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
             liste_carrxy[j.get()-4] = event.x-40
             liste_carrxy[j.get()-3] = event.y+40
             liste_carrxy[j.get()-2] = event.x+47
             liste_carrxy[j.get()-1] = event.y-47
-            liste_ca[f.get()-2] = Points(event.x-40,changeY(event.y)+40)#######
-            liste_ca[f.get()-1] = Points(event.x+47,changeY(event.y)-47)#######
+            liste_ca[f.get()-2] = Points(event.x-40,changeY(event.y)-47)#######
+            liste_ca[f.get()-1] = Points(event.x+47,changeY(event.y)+40)#######
         elif formeee.get() == 3:
             dessin.coords(object_id, event.x-40, event.y+40, event.x+47, event.y-47)
             liste_circxy[k.get()-4] = event.x-40
@@ -70,6 +79,8 @@ def deplacerforme(event):
             print("liste_circxy liste_cercle")
             print(liste_circxy)
             print(liste_cercle)
+        elif formeee.get() == 5:
+            dessin.coords(object_id, event.x-26,event.y-20,event.x,event.y-34,event.x+26,event.y-20,event.x+26,event.y+11,event.x,event.y+28,event.x-26,event.y+12)
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
     Text.set("")
     for q in range(0,len(liste_valid),4):
@@ -88,8 +99,8 @@ def choisirformes(event):
         liste_rectxy.append(event.y+40)
         liste_rectxy.append(event.x+100)
         liste_rectxy.append(event.y-50)
-        liste_ca.append(Points(event.x-100,changeY(event.y)+40))######
-        liste_ca.append(Points(event.x+100,changeY(event.y)-50))#####
+        liste_ca.append(Points(event.x-100,changeY(event.y)-50))######
+        liste_ca.append(Points(event.x+100,changeY(event.y)+40))#####
         Text.set(Text.get() + "\nP1(" + str(liste_rectxy[i.get()]) + ";" + str(liste_rectxy[i.get()+1]) + ") P2(" + str(liste_rectxy[i.get()+2]) + ";" + str(liste_rectxy[i.get()+3]) + ")")
         i.set(i.get()+4)
         f.set(f.get()+2)
@@ -101,8 +112,8 @@ def choisirformes(event):
         liste_carrxy.append(event.y+40)
         liste_carrxy.append(event.x+47)
         liste_carrxy.append(event.y-47)
-        liste_ca.append(Points(event.x-40,changeY(event.y)+40))#####
-        liste_ca.append(Points(event.x+47,changeY(event.y)-47))#####
+        liste_ca.append(Points(event.x-40,changeY(event.y)-47))#####
+        liste_ca.append(Points(event.x+47,changeY(event.y)+40))#####
         Text.set(Text.get() + "\nP1(" + str(liste_carrxy[j.get()]) + ";" + str(liste_carrxy[j.get()+1]) + ") P2(" + str(liste_carrxy[j.get()+2]) + ";" + str(liste_carrxy[j.get()+3]) + ")")
         j.set(j.get()+4)
         f.set(f.get()+2)
@@ -135,6 +146,19 @@ def choisirformes(event):
         started = True
         p.set(2)
         animate(1)
+    elif formeee.get() == 5:
+        object_id = dessin.create_polygon([event.x-26,event.y-20,event.x,event.y-34,event.x+26,event.y-20,event.x+26,event.y+11,event.x,event.y+28,event.x-26,event.y+12], outline='black', fill='#e530f5', width=2)#9df70f
+        #dessin.create_oval(event.x+32, event.y+28, event.x-32, event.y-34, fill='', width=1, outline='red', tag='oval')#11f1df #11d4f1
+        rayon = math.sqrt((event.x-(event.x-32))**2+(event.y-(event.y+28))**2)
+        liste_waypoint.append(Points(event.x,changeY(event.y))) # Point central
+        liste_waypoint.append(rayon) # Rayon de l'objectif
+        t.set(t.get()+2)
+        # X;Y Point gauche
+        # X;Y Point haut
+        # X;Y Point droit
+        # X;Y Point bas droit
+        # X;Y Point bas
+        # X;Y Point bas gauche
     else:
         formeee.set(0)
 
@@ -146,7 +170,45 @@ def choisirformes(event):
 # https://github.com/arimb/PurePursuit
 
 def valid():
+    global object_id
+    object_id = dessin.create_rectangle(505, 40, 195, 0, fill='black', width=3, outline='blue')
+    liste_ca.append(Points(195,changeY(40)))######
+    liste_ca.append(Points(505,changeY(0)))#####    
+    f.set(f.get()+2)
+    object_id = dessin.create_rectangle(1094, 40, 785, 0, fill='black', width=3, outline='blue')
+    liste_ca.append(Points(785,changeY(40)))######
+    liste_ca.append(Points(1094,changeY(0)))#####    
+    f.set(f.get()+2)
+    object_id = dessin.create_rectangle(620, 50, 546, 0, fill='black', width=3, outline='blue')
+    liste_ca.append(Points(546,changeY(50)))######
+    liste_ca.append(Points(620,changeY(0)))#####    
+    f.set(f.get()+2)
+    object_id = dessin.create_rectangle(745, 50, 674, 0, fill='black', width=3, outline='blue')
+    liste_ca.append(Points(674,changeY(50)))######
+    liste_ca.append(Points(745,changeY(0)))#####    
+    f.set(f.get()+2)
+    object_id = dessin.create_rectangle(649, 134, 642, 0, fill='black', width=3, outline='blue')
+    liste_ca.append(Points(642,changeY(134)))######
+    liste_ca.append(Points(649,changeY(0)))#####    
+    f.set(f.get()+2)
+    object_id = dessin.create_rectangle(50, 574, 0, 502, fill='black', width=3, outline='blue')
+    liste_ca.append(Points(0,changeY(574)))######
+    liste_ca.append(Points(50,changeY(502)))#####    
+    f.set(f.get()+2)
+    object_id = dessin.create_rectangle(1240, 574, 1288, 502, fill='black', width=3, outline='blue')
+    liste_ca.append(Points(0,changeY(574)))######
+    liste_ca.append(Points(50,changeY(502)))#####    
+    f.set(f.get()+2)
+    object_id = dessin.create_polygon([0,727,0,645,218,860,136,860], outline='blue', fill='black', width=3)
+    #liste_ca.append(Points(0,changeY(574)))######
+    #liste_ca.append(Points(50,changeY(502)))#####    
+    #f.set(f.get()+2)
     #liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
+    object_id = dessin.create_polygon([1076,860,1288,645,1288,727,1156,860], outline='blue', fill='black', width=3)
+    #liste_ca.append(Points(0,changeY(574)))######
+    #liste_ca.append(Points(50,changeY(502)))#####    
+    #f.set(f.get()+2)
+
     print("CERCLE : ")
     print(liste_cercle)
     print("CARRES")
@@ -184,8 +246,11 @@ def suppr(event):
         del liste_cercle[o.get()-1]
         del liste_cercle[o.get()-2]
         o.set(o.get()-2)
+    elif formeee.get() == 5:
+        del liste_waypoint[t.get()-1]
+        del liste_waypoint[t.get()-2]
     elif formeee.get() == 4:
-        started = False         
+        started = False        
     dessin.delete(bord)
     liste_valid = [*liste_rectxy, *liste_carrxy, *liste_circxy]
     Text.set("")
@@ -195,7 +260,10 @@ def suppr(event):
 
 def horizonta():
     formeee.set(4) # MOBILE HORIZONTAL
-    
+
+
+def waypoint():
+    formeee.set(5)
 
 
 def animate(v):
@@ -250,6 +318,7 @@ e1 = Entry(dessin2)
 dessin2.create_window(200,480,window=e1, height=600, width=350)
 Text = StringVar()
 
+t = IntVar(0)
 i = IntVar(0)
 j = IntVar(0)
 k = IntVar(0)
@@ -272,12 +341,14 @@ bouton_carre = dessin2.create_window(170,105, window = bouton_carre)
 bouton_rond = Button(fen, text='Rond', command=ro)
 bouton_rond = dessin2.create_window(245,105, window = bouton_rond)
 
-bouton_valid = Button(fen, text='Confirmer', command=valid)
+bouton_valid = Button(fen, text='Terrain', command=valid)
 bouton_valid = dessin2.create_window(340,105, window = bouton_valid)
 
 bouton_hor = Button(fen, text='Horizontal', command=horizonta)
-bouton_hor = dessin2.create_window(200,70, window = bouton_hor)
+bouton_hor = dessin2.create_window(150,70, window = bouton_hor)
 
+bouton_hor = Button(fen, text='Waypoint', command=waypoint)
+bouton_hor = dessin2.create_window(300,70, window = bouton_hor)
 
 ##----- Création du Label -----##
 lbl = Label(dessin2, text='',fg='black',bg='black')
@@ -293,8 +364,8 @@ bouton_quitter.grid(row = 1, column = 1, padx = 3, pady = 3, sticky=E)
 
 # Image 
 im = PhotoImage(file = '/home/robot/Bureau/NoeSacha/carte_projet.png', master=fen)
-
 logo1 = dessin.create_image(644, 430, image = im )
+
 
 #Texte IHM PLACER OBSTACLES
 dessin2.create_text(200, 30, text='Placer Obstacles : ', fill='#000000', font='Arial 18')
