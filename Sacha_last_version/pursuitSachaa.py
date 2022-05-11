@@ -1,8 +1,12 @@
 # COLL SACHA pursuit
+from functools import total_ordering
 import math
 from tkinter import IntVar
+#from winreg import QueryReflectionKey
 import numpy as np
+import numpy as numpy
 import matplotlib.pyplot as plt
+from Points import Points
 
 
 # Vitesse de Target :
@@ -22,7 +26,8 @@ dt = 0.1
 L = 2.9
 
 list_detect = [] # Stabilisation des changements de vitesse
-
+liste_waypoint = [] # Liste Waypoint
+liste_astar = []
 
 show_animation = True
 
@@ -36,36 +41,48 @@ class State:
                             #                            https://en.wikipedia.org/wiki/Yaw_(rotation)
         self.v = v          # Vitesse 
         self.dyaw = 0.0
+        liste_waypoint.append(Points(47.29,-0.74)) # Point central
+        liste_waypoint.append(47)
         # self.vang = vang
+
+
+def InObjectif(self):
+    global IsInObjectif
+    print("CECI EST ISINOBJECTIF")
+    print(IsInObjectif)
+    i = 0 
+    while i < len(liste_waypoint):
+        pointest = liste_waypoint[i]
+        ray = liste_waypoint[i+1]
+        i += 2
+        dist = math.sqrt((pointest.x - self.x)**2 + (pointest.y - self.y)**2)
+        xmin = pointest.x-4
+        xmax = pointest.x+4
+        ymin = pointest.y-4
+        ymax = pointest.y+4
+        if (dist <= ray) and ((self.x > xmin) and (self.x < xmax) and (self.y > ymin) and (self.y < ymax)):
+            IsInObjectif = True
+        else:
+            IsInObjectif = False
 
 
     # Met à jour la position du robot (X;Y;Yaw;V)
 def update(state, a, delta):
     global detect
+    global IsInObjectif
     global tryagain
     global target_speed
     global cpt
     # Calcul de X et Y p.6 : https://homes.cs.washington.edu/~todorov/courses/cseP590/05_Kinematics.pdf
     state.x = state.x + state.v * math.cos(state.yaw) * dt      # Update Position X
     state.y = state.y + state.v * math.sin(state.yaw) * dt      # Update Position Y
+    InObjectif(state)
     print(state.v / L * math.tan(delta) * dt)
     state.dyaw = state.v / L * math.tan(delta) * dt
     print(tryagain)
     print(cpt)
-    """ if (detect<0 and detect - state.dyaw < 0) or (detect>0 and detect - state.dyaw > 0) : # Si changement de signe de vitesse angulaire
-         #state.v = state.v - a * dt/2
-         # and ((state.dyaw < -0.00) or (state.dyaw > 0.00))
-        tryagain = True
-        cpt += 1
-    else: 
-         #state.v = state.v + a * dt
-        tryagain = False
 
-    if tryagain and cpt<20:
-        target_speed = 10.0/3.6
-        cpt = 0
-    else:
-        target_speed = 3.0/3.6"""
+
 
     if ((detect<0 and detect - state.dyaw > 0) or (detect>0 and detect - state.dyaw < 0)) and (state.dyaw>0.01 or state.dyaw < -0.01) : # Si changement de signe de vitesse angulaire
                                         #<                                        #>
@@ -85,8 +102,11 @@ def update(state, a, delta):
     if tryagain:
         target_speed = 1.0/3.6
         #cpt = 0
+    elif IsInObjectif:
+        target_speed = 3.0/3.6
     else:
         target_speed = 13.0/3.6
+    
     state.yaw = state.yaw + state.v / L * math.tan(delta) * dt  # Update Angle Rotation Yaw
     state.v = state.v + a * dt                                  # Update Vitesse
     #state.vang = state.vang + newvang
@@ -149,9 +169,27 @@ def pure_pursuit_control(state, cx, cy, pind):
 target_speed = 0
 cpt = 0
 def main():
-    # Chemin Généré par A*
-    cx = np.arange(0, 60, 0.1) # (Xdebut, Xarrivée, Step)
-    cy = [math.sin(ix / 5.0) * ix / 2.0 for ix in cx]
+
+    ## GÉNÉRATION D'UN FAUX CHEMIN ASTAR POUR TESTER LA RÉCUPÉRATION DES POINTS VIA CX ET CY
+    for n in range(1,101):
+        liste_astar.append(n)
+
+    ## CREATION CX ET CY QUI CORRESPONDENT AUX POINTS DU CHEMIN DE L'ASTAR
+    cx = np.array([])
+    cy = np.array([])
+
+    ## REMPLISSAGE DE CX ET CY VIA LA LISTE GÉNÉRÉE PAR L'ASTAR QUI CONTIENT LES POINTS DU CHEMIN À SUIVRE
+    n = 0 
+    while n < len(liste_astar):
+        cx = numpy.append(cx,liste_astar[n])
+        cy = numpy.append(cy,liste_astar[n+1])
+        n += 2
+
+    #cx = np.arange(0, 60, 0.1) # (Xdebut, Xarrivée, Step)
+    #cy = [math.sin(ix / 5.0) * ix / 2.0 for ix in cx]
+
+    #cx = np.array([4.0 ,5.0 ,6.0 ,7.0 ,8.0 ,9.0 ,10.0 ,11.0 ,15.0 ,16.0]) # ABSCISSE DE CHAQUE POINT DU CHEMIN 
+    #cy = np.array([0.0 ,1.0 ,2.0 ,3.0 ,4.0 ,5.0 ,5.0 ,6.0 ,7.0 ,8.0]) # ORDONNÉE DE CHAQUE POINT DU CHEMIN
 
     # RÉGLER VITESSE
     #target_speed = 10.0 / 3.6  # [m/s]
@@ -209,6 +247,7 @@ def main():
 
 
 
+
 ################################### RESTANT ###################################
     assert lastIndex >= target_ind, "Cannot goal"
 
@@ -229,7 +268,7 @@ def main():
         plt.grid(True)
         plt.show()
 
-
+IsInObjectif = False
 tryagain = False
 detect = 0
 
